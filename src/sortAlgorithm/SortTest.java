@@ -65,7 +65,7 @@ public class SortTest {
             @Override
             public void run() {
                 long startTime = System.currentTimeMillis();
-                //quickSort.sort(array);
+                quickSort.sort(array);
                 long endTime = System.currentTimeMillis();
                 System.out.println("quick = " + (endTime - startTime));
             }
@@ -78,7 +78,7 @@ public class SortTest {
         Thread thread4 = new Thread(quick);
 
         System.out.println("Start sorting");
-        thread.start();
+        //thread.start();
         thread1.start();
         thread2.start();
         thread3.start();
