@@ -1,22 +1,29 @@
 package sortAlgorithm.quickSort;
 
+/**
+ * 随机快速排序, 递归版本, TODO:更改为迭代版本
+ */
 public class QuickSort {
 
-    public void sort(int[] array) {
-        if (array.length <= 1) return;
-        recSort(array, 0, array.length);
+    public static int[] sort(int[] array) {
+        if (array.length <= 1) return array;
+        recSort(array, 0, array.length - 1);
+        System.out.println("QuickSort:");
+        return array;
     }
 
-    private void recSort(int[] array, int left, int right) {
-        if (right - left < 1) return;
-        int partition = partition(array, array[right - 1], left, right);
-        recSort(array, left, partition);
-        recSort(array, partition + 1, right);
+    private static void recSort(int[] array, int left, int right) {
+        if (right - left > 1) {
+            swap(array, left + (int) (Math.random() * (right - left + 1)), right);
+            int[] partition = partition(array, array[right], left, right);
+            recSort(array, left, partition[0]);
+            recSort(array, partition[1], right);
+        }
     }
 
-    private int partition(int[] array, int number, int left, int right) {
+    private static int[] partition(int[] array, int number, int left, int right) {
         int less = left - 1;
-        int more = right;
+        int more = right + 1;
         int current = left;
         while (current < more) {
             if (array[current] < number)
@@ -26,17 +33,16 @@ public class QuickSort {
             else
                 current++;
         }
-        return more - 1;
+        return new int[] {less, more};
     }
 
-    private void swap(int[] result, int j, int i) {
+    private static void swap(int[] result, int j, int i) {
         int temp = result[j];
         result[j] = result[i];
         result[i] = temp;
     }
 
     public static void main(String[] args) {
-        QuickSort quickSort = new QuickSort();
-        quickSort.sort(new int[]{32,56,1,3,12,666,5,1,3,5});
+        sort(new int[]{32,56,1,3,3,12,666});
     }
 }

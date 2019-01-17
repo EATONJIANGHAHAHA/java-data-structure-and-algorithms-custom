@@ -1,7 +1,9 @@
 package sortAlgorithm;
 
 import sortAlgorithm.bubbleSort.BubbleSort;
+import sortAlgorithm.heapSort.HeapSort;
 import sortAlgorithm.insertionSort.InsertionSort;
+import sortAlgorithm.mergeSort.MergeSort;
 import sortAlgorithm.quickSort.QuickSort;
 import sortAlgorithm.selectionSort.SelectionSort;
 import sortAlgorithm.shellSort.ShellSort;
@@ -11,77 +13,111 @@ import java.util.Random;
 public class SortTest {
 
     public static void main(String[] args) {
-        int[] array = new int[99999999];
-        Random random = new Random(7);
+
+        int testLength = 9999999;
+
+        int[] sample = new int[testLength];
+        Random random = new Random(3);
         System.out.println("Generating numbers for calculations");
-        for (int i = array.length - 1; i > 0; i--) {
+        for (int i = sample.length - 1; i > 0; i--) {
             //array[i] = i;
-            array[i] = random.nextInt(9999999);
+            sample[i] = random.nextInt(999999999);
         }
-        System.out.println("Done generating numbers");
-        BubbleSort bubbleSort = new BubbleSort();
-        SelectionSort selectionSort = new SelectionSort();
-        InsertionSort insertionSort = new InsertionSort();
-        ShellSort shellSort = new ShellSort();
-        QuickSort quickSort = new QuickSort();
+        System.out.println("Done generate numbers");
 
         Runnable bubble = new Runnable() {
             @Override
             public void run() {
+                int[] array = getNewArray(sample);
                 long startTime = System.currentTimeMillis();
-                bubbleSort.sort(array);
+                BubbleSort.sort(array);
                 long endTime = System.currentTimeMillis();
-                System.out.println("Bubble:" + (endTime - startTime));
+                System.out.println((endTime - startTime));
             }
         };
         Runnable selection = new Runnable() {
             @Override
             public void run() {
+                int[] array = getNewArray(sample);
                 long startTime = System.currentTimeMillis();
-                selectionSort.sort(array);
+                SelectionSort.sort(array);
                 long endTime = System.currentTimeMillis();
-                System.out.println("selection:" + (endTime - startTime));
+                System.out.println((endTime - startTime));
             }
         };
         Runnable insertion = new Runnable() {
             @Override
             public void run() {
+                int[] array = getNewArray(sample);
                 long startTime = System.currentTimeMillis();
-                insertionSort.sort(array);
+                InsertionSort.sort(array);
                 long endTime = System.currentTimeMillis();
-                System.out.println("insertion:" + (endTime - startTime));
+                System.out.println((endTime - startTime));
             }
         };
         Runnable shell = new Runnable() {
             @Override
             public void run() {
+                int[] array = getNewArray(sample);
                 long startTime = System.currentTimeMillis();
-                shellSort.sort1(array);
+                ShellSort.sort(array);
                 long endTime = System.currentTimeMillis();
-                System.out.println("shell:" + (endTime - startTime));
+                System.out.println((endTime - startTime));
             }
         };
         Runnable quick = new Runnable() {
             @Override
             public void run() {
+                int[] array = getNewArray(sample);
                 long startTime = System.currentTimeMillis();
-                quickSort.sort(array);
+                QuickSort.sort(array);
                 long endTime = System.currentTimeMillis();
-                System.out.println("quick = " + (endTime - startTime));
+                System.out.println((endTime - startTime));
+            }
+        };
+        Runnable merge = new Runnable() {
+            @Override
+            public void run() {
+                int[] array = getNewArray(sample);
+                long startTime = System.currentTimeMillis();
+                MergeSort.sort(array);
+                long endTime = System.currentTimeMillis();
+                System.out.println((endTime - startTime));
+            }
+        };
+        Runnable heap = new Runnable() {
+            @Override
+            public void run() {
+                int[] array = getNewArray(sample);
+                long startTime = System.currentTimeMillis();
+                HeapSort.sort(array);
+                long endTime = System.currentTimeMillis();
+                System.out.println((endTime - startTime));
             }
         };
 
-        Thread thread = new Thread(bubble);
-        Thread thread1 = new Thread(selection);
-        Thread thread2 = new Thread(insertion);
-        Thread thread3 = new Thread(shell);
-        Thread thread4 = new Thread(quick);
+        Thread threadBubble = new Thread(bubble);
+        Thread threadSelection = new Thread(selection);
+        Thread threadInsertion = new Thread(insertion);
+        Thread threadShell = new Thread(shell);
+        Thread threadQuick = new Thread(quick);
+        Thread threadMerge = new Thread(merge);
+        Thread threadHeap = new Thread(heap);
 
         System.out.println("Start sorting");
-        //thread.start();
-        thread1.start();
-        thread2.start();
-        thread3.start();
-        thread4.start();
+        //threadBubble.start();
+        //threadSelection.start();
+        //threadInsertion.start();
+        threadShell.start();
+        threadQuick.start();
+        threadMerge.start();
+        threadHeap.start();
+    }
+
+    private static int[] getNewArray(int[] sample) {
+        int[] array = new int[sample.length];
+        for (int i = 0; i < sample.length; i++)
+            array[i] = sample[i];
+        return array;
     }
 }
