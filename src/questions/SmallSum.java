@@ -1,8 +1,12 @@
-package sortAlgorithm.mergeSort;
+package questions;
 
+/**
+ * 在一个数组中,每一个数左边比当前数小的数累加起来,叫做这个数组的小和。求一个数组
+ * 的小和.
+ */
 public class SmallSum {
 
-    public static int smallSum(int[] array) {
+    public static int solve(int[] array) {
         if (array.length <= 1) return 0;
         return recSort(array, 0, array.length - 1);
     }
@@ -34,6 +38,6 @@ public class SmallSum {
     }
 
     public static void main(String[] args) {
-        int result = smallSum(new int[]{1, 3, 4, 2, 5});
+        int result = solve(new int[]{1, 3, 4, 2, 5});
     }
 }
