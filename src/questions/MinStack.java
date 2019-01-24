@@ -2,6 +2,9 @@ package questions;
 
 import stack.ArrayStack;
 
+/**
+ * 有一个栈,怎样做才能在在任何时候返回整个栈的最小值的时间复杂度都为O(1)?
+ */
 public class MinStack extends ArrayStack {
 
     private Integer[] minStack;

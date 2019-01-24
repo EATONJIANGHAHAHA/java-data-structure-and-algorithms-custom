@@ -2,7 +2,7 @@ package questions;
 
 /**
  * 在一个数组中,每一个数左边比当前数小的数累加起来,叫做这个数组的小和。求一个数组
- * 的小和.
+ * 的小和. 时间复杂度不得高于O(N*logN)
  */
 public class SmallSum {
 

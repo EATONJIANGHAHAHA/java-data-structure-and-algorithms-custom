@@ -1,5 +1,8 @@
 package questions;
 
+/**
+ * 求一个有序数组的最大差值,时间复杂度不得高于等于O(N*logN),不得使用非基于比较的排序
+ */
 public class MaxGap {
 
     public static int solve(int[] array) {

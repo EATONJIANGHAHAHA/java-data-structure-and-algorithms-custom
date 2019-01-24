@@ -13,6 +13,7 @@ public class QueueImplementedStack<T> {
     private Queue<T> help = new LinkedList<>();
 
     public T peek() {
+        if (data.isEmpty() && help.isEmpty()) throw new RuntimeException("Stack is empty.");
         T object = pop();
         push(object);
         return object;
@@ -23,6 +24,7 @@ public class QueueImplementedStack<T> {
     }
 
     public T pop() {
+        if (data.isEmpty() && help.isEmpty()) throw new RuntimeException("Stack is empty.");
         while (data.size() > 1)
             help.add(data.poll());
         T object = data.poll();
