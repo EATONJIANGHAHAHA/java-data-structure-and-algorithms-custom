@@ -1,5 +1,8 @@
-package stack;
+package List;
 
+/**
+ * TODO:改为ArrayList实现
+ */
 public class ArrayStack {
 
     protected Integer[] array;

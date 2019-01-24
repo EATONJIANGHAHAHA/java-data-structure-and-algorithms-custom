@@ -18,12 +18,16 @@ public class MaxGap {
         if (max == min) return 0;
         for (int i = 0; i < length; i++) {
             int bucket = (array[i] - min) * length / (max - min);
+            mins[bucket] = hasNumbers[bucket] ? Math.min(mins[bucket], array[i]) : array[i];
+            maxs[bucket] = hasNumbers[bucket] ? Math.max(maxs[bucket], array[i]) : array[i];
             hasNumbers[bucket] = true;
-            mins[bucket] = Math.min(mins[bucket], array[i]);
-            maxs[bucket] = Math.max(maxs[bucket], array[i]);
         }
         for (int i = 0; i < hasNumbers.length - 1; i++)
             maxGap = hasNumbers[i] && maxs[i] - mins[i + 1] > maxGap ? maxs[i] - mins[i + 1] : maxGap;
         return maxGap;
+    }
+
+    public static void main(String[] args) {
+        solve(new int[] {1,3,4,7,8,9,10});
     }
 }
