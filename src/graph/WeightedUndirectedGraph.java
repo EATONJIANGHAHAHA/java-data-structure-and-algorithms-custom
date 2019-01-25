@@ -181,11 +181,11 @@ public class WeightedUndirectedGraph<Vertex> {
         return edges;
     }
 
-    /*public List<Vertex> depthFirst() {
+    /*public sequentialList<Vertex> depthFirst() {
 
     }
 
-    public List<Vertex> breadthFirest() {
+    public sequentialList<Vertex> breadthFirest() {
 
     }
 

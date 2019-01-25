@@ -1,4 +1,4 @@
-package List;
+package sequentialList;
 
 /**
  * TODO:改为ArrayList实现
@@ -30,10 +30,7 @@ public class ArrayStack {
     }
 
     public static void main(String[] args) {
-        ArrayStack arrayStack = new ArrayStack(5);
-        arrayStack.push(-4);
-        System.out.println("arrayStack = " + arrayStack.pop());
-        System.out.println("arrayStack = " + arrayStack.peek());
-        //arrayStack.push(-2);
+        ArrayStack stack = new ArrayStack(5);
+
     }
 }
