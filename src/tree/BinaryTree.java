@@ -1,8 +1,10 @@
-package BinaryTree;
+package tree;
 
 import com.sun.istack.internal.Nullable;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
@@ -36,14 +38,16 @@ public class BinaryTree<T> {
      * @param key 键
      * @return 值
      */
-    public T find(Integer key) {
-        Node current = root;
-        while (true) {
-            if (current.index.equals(key)) return current.value;
-            if (key < current.index && current.left != null) current = current.left;
-            else if (key > current.index && current.right != null) current = current.right;
-            return null;
-        }
+    protected T findByKey(Integer key) {
+        return findByKey(root, key);
+    }
+
+    private T findByKey(Node head, Integer key) {
+        if (head == null) return null;
+        if (head.index.equals(key)) return head.value;
+        T result = findByKey(head.left, key);
+        if (result != null) return result;
+        return findByKey(head.right, key);
     }
 
     /**
@@ -51,14 +55,16 @@ public class BinaryTree<T> {
      * @param key
      * @return
      */
-    private Node findNode(Integer key) {
-        Node current = root;
-        while (true) {
-            if (current.index.equals(key)) return current;
-            if (key < current.index && current.left != null) current = current.left;
-            else if (key > current.index && current.right != null) current = current.right;
-            return null;
-        }
+    protected Node node(Integer key) {
+        return node(root, key);
+    }
+
+    private Node node(Node head, Integer key) {
+        if (head == null) return null;
+        if (head.index.equals(key)) return head;
+        Node result = node(head.left, key);
+        if (result != null) return result;
+        return node(head.right, key);
     }
 
     /**
@@ -87,6 +93,24 @@ public class BinaryTree<T> {
 
     public void delete(Integer key) {
         throw new NotImplementedException();
+    }
+
+    public Queue<Node> breadthFirstTraversal() {
+        Queue<Node> currentLevel = new LinkedList<>();
+        Queue<Node> nextLevel = new LinkedList<>();
+        Queue<Node> result = new LinkedList<>();
+        currentLevel.offer(root);
+        while (!currentLevel.isEmpty()) {
+            while (!currentLevel.isEmpty()) {
+                Node current = currentLevel.poll();
+                if (current.left != null) nextLevel.offer(current.left);
+                if (current.right != null) nextLevel.offer(current.right);
+                result.offer(current);
+            }
+            currentLevel = nextLevel;
+            nextLevel = new LinkedList<>();
+        }
+        return result;
     }
 
     public void preOrder() {
@@ -239,13 +263,13 @@ public class BinaryTree<T> {
             return;
         }
         printInOrder(head.right, height + 1, "v", len);
-        String val = to + head.index + to;
+        String val = to + head.index + "," + head.value + to;
         int lenM = val.length();
         int lenL = (len - lenM) / 2;
         int lenR = len - lenM - lenL;
         val = getSpace(lenL) + val + getSpace(lenR);
         System.out.println(getSpace(height * len) + val);
-        printInOrder(head.left, height + 1, "^", len);
+        printInOrder(head.left, height + 1, "∧", len);
     }
 
     public String getSpace(int num) {
@@ -255,6 +279,27 @@ public class BinaryTree<T> {
             buf.append(space);
         }
         return buf.toString();
+    }
+
+    public boolean isCompleteBinaryTree() {
+        Queue<Node> traversal = breadthFirstTraversal();
+        boolean stage = false;
+        for (Node node: traversal) {
+            if (!stage) {
+                if (node.left == null && node.right != null) return false;
+                if (isStageTwo(node)) stage = true;
+            } else
+                if (!isLeave(node)) return false;
+        }
+        return true;
+    }
+
+    private boolean isLeave(Node node) {
+        return node.left == null || node.right == null;
+    }
+
+    private boolean isStageTwo(Node node) {
+        return isLeave(node) || node.left != null && node.right == null;
     }
 
     public static void main(String[] args) {
@@ -268,5 +313,7 @@ public class BinaryTree<T> {
         tree.insert(54, 1);
         tree.insert(98, 1);
         tree.printTree();
+        Integer result = (Integer) tree.findByKey(12);
+        System.out.println(result);
     }
 }

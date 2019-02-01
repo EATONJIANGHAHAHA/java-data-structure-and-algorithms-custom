@@ -1,4 +1,4 @@
-package sequentialList;
+package list;
 
 public class Stack<T> {
 

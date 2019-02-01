@@ -1,4 +1,4 @@
-package sequentialList;
+package list;
 
 import com.sun.istack.internal.Nullable;
 
