@@ -111,6 +111,7 @@ public class BinarySearchTree<T> extends BinaryTree<T> {
 //        tree.insert(11, 9);
 //        tree.insert(16, 10);
         tree.printTree();
-        boolean result = tree.isCompleteBinaryTree();
+        boolean result = tree.isBinarySearchTree();
+        System.out.println(result);
     }
 }

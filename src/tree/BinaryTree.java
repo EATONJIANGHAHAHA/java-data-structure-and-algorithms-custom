@@ -294,12 +294,56 @@ public class BinaryTree<T> {
         return true;
     }
 
-    private boolean isLeave(Node node) {
+    public boolean isBinarySearchTree() {
+        return isBinarySearchTree(root);
+    }
+
+    private Boolean isBinarySearchTree(Node head) {
+        if (isLeave(head)) return true;
+        Boolean isBst = head.left.index < head.index && head.right.index > head.index;
+        if (!isBst) return false;
+        isBst = isBinarySearchTree(head.left);
+        if (!isBst) return false;
+        isBst = isBinarySearchTree(head.right);
+        return isBst;
+    }
+
+    protected boolean isLeave(Node node) {
         return node.left == null || node.right == null;
     }
 
     private boolean isStageTwo(Node node) {
         return isLeave(node) || node.left != null && node.right == null;
+    }
+
+    public int getNfromCompleteB() {
+        if (!isCompleteBinaryTree()) throw new IllegalArgumentException("This tree is not complete binary tree.");
+        return getNfromCompleteB(root);
+    }
+
+    private int getNfromCompleteB(Node head) {
+        int hLeft = getLeftHight(head);
+        int hRight = getRightHight(head);
+        if (hLeft == hRight) return (int) Math.pow(2, hLeft) - 1;
+        throw new IllegalArgumentException();
+    }
+
+    private int getRightHight(Node head) {
+        int h = 0;
+        while (head != null) {
+            head = head.right;
+            h++;
+        }
+        return h;
+    }
+
+    private int getLeftHight(Node head) {
+        int h = 0;
+        while (head != null) {
+            head = head.left;
+            h++;
+        }
+        return h;
     }
 
     public static void main(String[] args) {
@@ -313,7 +357,7 @@ public class BinaryTree<T> {
         tree.insert(54, 1);
         tree.insert(98, 1);
         tree.printTree();
-        Integer result = (Integer) tree.findByKey(12);
-        System.out.println(result);
+        boolean isbst = tree.isBinarySearchTree();
+        System.out.println(isbst);
     }
 }

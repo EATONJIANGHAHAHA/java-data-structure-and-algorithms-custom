@@ -1,34 +1,71 @@
 package sortAlgorithm.bucketSort;
 
-import list.LinkedList;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.LinkedList;
+
+/**
+ * 时间复杂度不达标,目测只达到到n*log n.
+ */
 public class BucketSort {
 
-    public static class MaxMinLinkedList {
-        LinkedList list = new LinkedList();
-        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+    private static class MaxMinLinkedList{
 
-        public void add() {}
+        private LinkedList<Integer> list = new LinkedList<>();
+        private Integer max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+
+        public void add(Integer number) {
+            list.add(number);
+            max = max < number ? number : max;
+            min = min > number ? number : min;
+        }
+
+        public MaxMinLinkedList addAll(MaxMinLinkedList list) {
+            this.list.addAll(list.list);
+            return this;
+        }
     }
 
     public static int[] sort(int[] array) {
-        LinkedList[] buckets = getBuckets(getBucketNumber(array.length));
         int[] range = getRange(array);
+        MaxMinLinkedList[] buckets = getBuckets(getBucketNumber(range[0] - range[1]));
         for (int number : array) {
-            int index = getBucketIndex(number, range, buckets.length);
+            int index = getBucketIndex(number, range[0], range[1], buckets.length - 1);
             buckets[index].add(number);
         }
-        for (LinkedList bucket : buckets) sort(bucket);
-        throw new NotImplementedException();
+        int index = 0;
+        for (MaxMinLinkedList bucket : buckets) {
+            if (!bucket.list.isEmpty()) {
+                bucket = sort(bucket);
+                while (!bucket.list.isEmpty())
+                    array[index++] = bucket.list.remove();
+            }
+        }
+        System.out.println("BucketSort:");
+        return array;
     }
 
-    private static void sort(LinkedList bucket) {
-
+    private static MaxMinLinkedList sort(MaxMinLinkedList bucket) {
+        if (bucket.list.size() == 1) return bucket;
+        if (bucket.max - bucket.min == 0) return bucket;
+        MaxMinLinkedList[] smallBuckets = getBuckets(getBucketNumber(bucket.max - bucket.min));
+        for (Integer number : bucket.list) {
+            int index = getBucketIndex(number, bucket.max, bucket.min, smallBuckets.length - 1);
+            smallBuckets[index].add(number);
+        }
+        int index = 0;
+        MaxMinLinkedList result = new MaxMinLinkedList();
+        for (MaxMinLinkedList smallBucket: smallBuckets) {
+            if (!smallBucket.list.isEmpty()) {
+                result.addAll(sort(smallBucket));
+            }
+        }
+        bucket = result;
+        return bucket;
     }
 
-    private static int getBucketIndex(int number, int[] range, int length) {
-        return (number - range[1]) * length / (range[0]- range[1]);
+    private static int getBucketIndex(int number, int max, int min, int length) {
+        if (max - min == 0) return 0;
+        return (number - min) * length / (max - min);
     }
 
     private static int[] getRange(int[] array) {
@@ -40,11 +77,17 @@ public class BucketSort {
         return result; //result{max, min}
     }
 
-    private static LinkedList[] getBuckets(int bucketNumber) {
-        return new LinkedList[10];
+    private static MaxMinLinkedList[] getBuckets(int bucketNumber) {
+        MaxMinLinkedList[] lists = new MaxMinLinkedList[bucketNumber];
+        for (int i = 0; i < lists.length; i ++) lists[i] = new MaxMinLinkedList();
+        return lists;
     }
 
-    private static int getBucketNumber(int length) {
-        return 10;
+    private static int getBucketNumber(int range) {
+        return range + 1;
+    }
+
+    public static void main(String[] args) {
+        sort(new int[]{20, 9, 5, 11, 14, 8, 2, 1, 19, 5, 3, 7, 17, 0});
     }
 }
