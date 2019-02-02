@@ -3,7 +3,7 @@ package graph;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class WeightedUndirectedGraph<Vertex> {
+public class WeightedUndirectedGraph<V> {
 
     private int numberOfVertices;
 
@@ -15,17 +15,17 @@ public class WeightedUndirectedGraph<Vertex> {
 
     private class VertexInfo {
 
-        Vertex vertex;
+        V vertext;
 
         //this id here is just the array index within the adjmatrix. It is managed manually.
         int id;
 
         boolean visited;
 
-        VertexInfo(Vertex vertex){
+        VertexInfo(V vertext){
             id = numberOfVertices;
             visited = false;
-            this.vertex = vertex;
+            this.vertext = vertext;
             numberOfVertices++;
         }
     }
@@ -36,14 +36,14 @@ public class WeightedUndirectedGraph<Vertex> {
         this.vertexInfos = new LinkedList<>();
     }
 
-    public boolean hasVertex(Vertex v) {
+    public boolean hasVertex(V v) {
         VertexInfo vertexInfo = findVertexInfo(v);
         if (vertexInfo != null)
             return this.vertexInfos.contains(vertexInfo);
         return false;
     }
 
-    public boolean areAdjacent(Vertex s, Vertex e) {
+    public boolean areAdjacent(V s, V e) {
         if (hasVertex(s) && hasVertex(e)) {
             VertexInfo evi = findVertexInfo(e);
             for (ArrayList<Integer> list: this.adjMatrix)
@@ -52,14 +52,14 @@ public class WeightedUndirectedGraph<Vertex> {
         return false;
     }
 
-    private VertexInfo findVertexInfo(Vertex vertex) {
+    private VertexInfo findVertexInfo(V vertex) {
         for (VertexInfo v: this.vertexInfos)
-            if (v.vertex.equals(vertex)) return v;
+            if (v.vertext.equals(vertex)) return v;
         return null;
     }
 
-    private void addVertex(Vertex vertex) {
-        this.vertexInfos.add(new VertexInfo(vertex));
+    private void addVertex(V v) {
+        this.vertexInfos.add(new VertexInfo(v));
         for (ArrayList list: adjMatrix)
             list.add(0);
         ArrayList<Integer> arrayList = new ArrayList<>();
@@ -68,7 +68,7 @@ public class WeightedUndirectedGraph<Vertex> {
         }
     }
 
-    public void addEdge(Vertex s, Vertex e, Integer weight) {
+    public void addEdge(V s, V e, Integer weight) {
         if (hasVertex(s) & hasVertex(e)) {
             VertexInfo start = findVertexInfo(s);
             VertexInfo end = findVertexInfo(e);
@@ -78,8 +78,8 @@ public class WeightedUndirectedGraph<Vertex> {
         }
     }
 
-    public void removeVertex(Vertex vertex) {
-        VertexInfo vertexInfo = findVertexInfo(vertex);
+    public void removeVertex(V v) {
+        VertexInfo vertexInfo = findVertexInfo(v);
         if (vertexInfo != null) {
             for (int i = vertexInfo.id + 1; i < vertexInfos.size(); i++) {
                 VertexInfo vertexInfo1 = vertexInfos.get(i);
@@ -94,7 +94,7 @@ public class WeightedUndirectedGraph<Vertex> {
         }
     }
 
-    public void removeEdge(Vertex s, Vertex e) {
+    public void removeEdge(V s, V e) {
         if (hasVertex(s) & hasVertex(e)) {
             VertexInfo start = findVertexInfo(s);
             VertexInfo end = findVertexInfo(e);
@@ -104,19 +104,19 @@ public class WeightedUndirectedGraph<Vertex> {
         }
     }
 
-    public void setEdgeWeight(Vertex s, Vertex e, int weight) {
+    public void setEdgeWeight(V s, V e, int weight) {
         addEdge(s, e, weight);
     }
 
-    public Integer getEdgeWeight(Vertex s, Vertex e) {
+    public Integer getEdgeWeight(V s, V e) {
         VertexInfo start = findVertexInfo(s);
         VertexInfo end = findVertexInfo(e);
         return this.adjMatrix.get(start.id).get(end.id);
     }
 
-    public Integer degree(Vertex vertex) {
+    public Integer degree(V v) {
         Integer degree = 0;
-        VertexInfo vertexInfo = findVertexInfo(vertex);
+        VertexInfo vertexInfo = findVertexInfo(v);
         if (vertexInfo != null)
             for (Integer weight: this.adjMatrix.get(vertexInfo.id))
                 if (weight != 0)
@@ -124,9 +124,9 @@ public class WeightedUndirectedGraph<Vertex> {
         return degree;
     }
 
-    public Integer weightedDegree(Vertex vertex) {
+    public Integer weightedDegree(V v) {
         Integer degree = 0;
-        VertexInfo vertexInfo = findVertexInfo(vertex);
+        VertexInfo vertexInfo = findVertexInfo(v);
         if (vertexInfo != null)
             for (Integer weight: this.adjMatrix.get(vertexInfo.id))
                 if (weight != 0)
@@ -154,26 +154,26 @@ public class WeightedUndirectedGraph<Vertex> {
         return sum/2;
     }
 
-    public LinkedList<Vertex> getVertices() {
-        LinkedList<Vertex> vertices = new LinkedList<>();
+    public LinkedList<V> getVertices() {
+        LinkedList<V> vertices = new LinkedList<>();
         for (VertexInfo vertexInfo: this.vertexInfos)
-            vertices.add(vertexInfo.vertex);
+            vertices.add(vertexInfo.vertext);
         return vertices;
     }
 
-    public LinkedList<Vertex> getNeighbours(Vertex vertex) {
-        LinkedList<Vertex> vertices = new LinkedList<>();
-        VertexInfo vertexInfo = findVertexInfo(vertex);
+    public LinkedList<V> getNeighbours(V v) {
+        LinkedList<V> vertices = new LinkedList<>();
+        VertexInfo vertexInfo = findVertexInfo(v);
         for (Integer i: this.adjMatrix.get(vertexInfo.id)) {
             if (i != 0)
-                vertices.add(this.vertexInfos.get(i).vertex);
+                vertices.add(this.vertexInfos.get(i).vertext);
         }
         return vertices;
     }
 
-    public LinkedList<Integer> getEdge(Vertex vertex) {
+    public LinkedList<Integer> getEdge(V v) {
         LinkedList<Integer> edges = new LinkedList<>();
-        VertexInfo vertexInfo = findVertexInfo(vertex);
+        VertexInfo vertexInfo = findVertexInfo(v);
         for (Integer i: this.adjMatrix.get(vertexInfo.id)) {
             if (i != 0)
                 edges.add(i);
@@ -181,11 +181,11 @@ public class WeightedUndirectedGraph<Vertex> {
         return edges;
     }
 
-    /*public sequentialList<Vertex> depthFirst() {
+    /*public sequentialList<V> depthFirst() {
 
     }
 
-    public sequentialList<Vertex> breadthFirest() {
+    public sequentialList<V> breadthFirest() {
 
     }
 

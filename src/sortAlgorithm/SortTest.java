@@ -1,7 +1,7 @@
 package sortAlgorithm;
 
 import sortAlgorithm.bubbleSort.BubbleSort;
-import sortAlgorithm.bucketSort.BucketSort;
+import sortAlgorithm.bucketSort.CounterSort;
 import sortAlgorithm.heapSort.HeapSort;
 import sortAlgorithm.insertionSort.InsertionSort;
 import sortAlgorithm.mergeSort.MergeSort;
@@ -101,7 +101,7 @@ public class SortTest {
             public void run() {
                 int[] array = getNewArray(sample);
                 long startTime = System.currentTimeMillis();
-                BucketSort.sort(array);
+                CounterSort.sort(array);
                 long endTime = System.currentTimeMillis();
                 System.out.println((endTime - startTime));
             }
