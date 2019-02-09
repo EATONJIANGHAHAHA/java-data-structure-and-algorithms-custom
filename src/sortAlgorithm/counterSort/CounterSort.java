@@ -1,6 +1,6 @@
 package sortAlgorithm.counterSort;
 
-public class BucketSort {
+public class CounterSort {
 
     public static int[] sort(int[] array) {
         if (array.length <= 1) return array;
@@ -15,7 +15,7 @@ public class BucketSort {
             }
             else bucketPtr++;
         }
-        System.out.println("BucketSort:");
+        System.out.println("CounterSort:");
         return array;
     }
 
