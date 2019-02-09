@@ -1,4 +1,4 @@
-package sequentialList;
+package list;
 
 import com.sun.istack.internal.Nullable;
 
@@ -6,17 +6,17 @@ import com.sun.istack.internal.Nullable;
  * 单端单项链表实现
  * @param <T>
  */
-public class LinkedList<T> {
+public class LinkedList<T> implements List<T>{
 
-    protected Node head;
-    protected int size = 0;
+    private Node head;
+    private int size = 0;
 
-    protected class Node {
+    public class Node extends List.Node {
 
-        protected T data;
-        protected Node next;
+        private T data;
+        private Node next;
 
-        protected Node(T data, @Nullable Node next) {
+        Node(T data, @Nullable Node next) {
             this.data = data;
             this.next = next;
         }
@@ -28,12 +28,8 @@ public class LinkedList<T> {
      * @param index
      * @return
      */
-    private boolean checkLengh(Integer index) {
-        return index < size;
-    }
-
     private boolean checkIndex(Integer index) {
-        return index <= size - 1;
+        return index < size;
     }
 
     /**
@@ -42,8 +38,9 @@ public class LinkedList<T> {
      * @param index
      * @return
      */
+    @Override
     public T get(Integer index) {
-        if (!checkLengh(index))
+        if (!checkIndex(index))
             throw new IndexOutOfBoundsException(index + ", with actual maximum index: " + (size() - 1));
         Node current = head;
         for (int i = 0; i < index; i++) current = current.next;
@@ -51,11 +48,12 @@ public class LinkedList<T> {
     }
 
     /**
-     * 返回给定数据的下标
+     * 返回给定数据第一次出现的对应下标
      *
      * @param data
      * @return
      */
+    @Override
     public Integer indexOf(T data) {
         Node current = head;
         for (int index = 0; current != null; index++) {
@@ -70,6 +68,7 @@ public class LinkedList<T> {
      *
      * @return
      */
+    @Override
     public boolean isEmpty() {
         return head == null;
     }
@@ -80,6 +79,7 @@ public class LinkedList<T> {
      * @param data
      * @return
      */
+    @Override
     public boolean contains(T data) {
         if (isEmpty()) throw new RuntimeException("The list is empty.");
         Node current = head;
@@ -106,8 +106,14 @@ public class LinkedList<T> {
      *
      * @return
      */
-    public int size() {
+    @Override
+    public Integer size() {
         return size;
+    }
+
+    @Override
+    public void add(Integer index, Object data) {
+
     }
 
     private void addFirstElement(T data) {
@@ -161,6 +167,12 @@ public class LinkedList<T> {
         return data;
     }
 
+    /**
+     * 移除链表中指定位置的元素
+     * @param index
+     * @return
+     */
+    @Override
     public T remove(Integer index) {
         if (isEmpty())
             throw new IndexOutOfBoundsException("This list is already empty.");
@@ -175,6 +187,41 @@ public class LinkedList<T> {
         previous.next = current.next;
         size--;
         return data;
+    }
+
+    /**
+     * 替换给定下标的数据
+     * @param index
+     * @param newData
+     * @return
+     */
+    @Override
+    public boolean set(Integer index, T newData){
+        if (!checkIndex(index) && index < 0) throw new IndexOutOfBoundsException();
+        Node current = head;
+        for (int i = 0; i < index; i ++) current = current.next;
+        if (current == null) return false;
+        current.data = newData;
+        return true;
+    }
+
+    /**
+     * 替换第一次出现与oldData数据相同的节点的数据
+     * @param oldData
+     * @param newData
+     * @return
+     */
+    @Override
+    public boolean set(T oldData, T newData) {
+        Node current = head;
+        int count = 0;
+        while (!current.data.equals(oldData) && checkIndex(count))
+            current = current.next;
+        if (current.data.equals(oldData)) {
+            current.data = newData;
+            return true;
+        }
+        return false;
     }
 
     /**

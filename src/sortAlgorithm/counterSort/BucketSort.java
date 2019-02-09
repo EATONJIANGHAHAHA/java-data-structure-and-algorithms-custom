@@ -1,4 +1,4 @@
-package sortAlgorithm.bucketSort;
+package sortAlgorithm.counterSort;
 
 public class BucketSort {
 

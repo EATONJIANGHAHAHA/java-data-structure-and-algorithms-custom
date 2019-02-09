@@ -1,7 +1,7 @@
-package sequentialList;
+package list;
 
 /**
- * 这是一个定向定长循环队列的数组实现 TODO:改为ArrayList实现
+ * 这是一个定向定长循环队列的数组实现
  */
 public class ArrayQueue {
 

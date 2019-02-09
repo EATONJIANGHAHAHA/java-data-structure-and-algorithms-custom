@@ -1,6 +1,8 @@
-package BinaryTree;
+package tree;
 
 import com.sun.istack.internal.Nullable;
+import javafx.util.Pair;
+import list.Queue;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Random;
@@ -10,11 +12,11 @@ import java.util.Stack;
  * A binary search tree implementation.
  * @param <T>
  */
-public class BinaryTree<T> {
+public class BinaryTree<T> implements Tree<T>{
 
     protected Node root;
 
-    protected class Node {
+    public class Node {
 
         protected Integer index;
         protected T value;
@@ -33,32 +35,55 @@ public class BinaryTree<T> {
 
     /**
      * 寻找一个键的对应值
-     * @param key 键
+     * @param index 键
      * @return 值
      */
-    public T find(Integer key) {
-        Node current = root;
-        while (true) {
-            if (current.index.equals(key)) return current.value;
-            if (key < current.index && current.left != null) current = current.left;
-            else if (key > current.index && current.right != null) current = current.right;
-            return null;
-        }
+    @Override
+    public T find(Integer index) {
+        if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
+        return find(root, index);
+    }
+
+    @Override
+    public Queue<Pair<Integer, T>> breadFirst() {
+        throw new NotImplementedException();
+    }
+
+    private T find(Node head, Integer index) {
+        if (head == null) return null;
+        if (head.index.equals(index)) return head.value;
+        T result = null;
+        result = find(head.left, index);
+        if (result != null) return result;
+        return find(head.right, index);
     }
 
     /**
      * 寻找一个键的对应节点
-     * @param key
+     * @param index
      * @return
      */
-    private Node findNode(Integer key) {
-        Node current = root;
-        while (true) {
-            if (current.index.equals(key)) return current;
-            if (key < current.index && current.left != null) current = current.left;
-            else if (key > current.index && current.right != null) current = current.right;
-            return null;
-        }
+    protected Node findNode(Integer index) {
+        if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
+        return findNode(root, index);
+    }
+
+    private Node findNode(Node head, Integer index) {
+        if (head == null) return null;
+        if (head.index.equals(index)) return head;
+        Node result = null;
+        result = findNode(head.left, index);
+        if (result != null) return result;
+        return findNode(head.right, index);
+    }
+
+    public void insert(Integer key) {
+        insert(key, null);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return root == null;
     }
 
     /**
@@ -66,7 +91,7 @@ public class BinaryTree<T> {
      * @param key 节点的键
      * @param value 节点的值
      */
-    public void insert(Integer key, T value) {
+    public void insert(Integer key, @Nullable T value) {
         if (root == null) {
             root = new Node(key, value, null, null, null);
             return;
@@ -85,31 +110,73 @@ public class BinaryTree<T> {
         else parrent.right = newNode;
     }
 
-    public void delete(Integer key) {
-        throw new NotImplementedException();
+    /**
+     * 删除一个节点，叶节点对接选则完全随机
+     * @param index
+     */
+    public T delete(Integer index) {
+        if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
+        return delete(root, index);
     }
 
-    public void preOrder() {
-        if (root == null) return;
+    private T delete(Node head, Integer index) {
+        if (head == null) return null;
+        if (head.index.equals(index)) {
+            if (isLeft(head.parrent, head)) head.parrent.left = null;
+            else head.parrent.right = null;
+            return head.value;
+        }
+        T result = null;
+        result = delete(head.left, index);
+        if (result != null) return result;
+        return delete(head.right, index);
+    }
+
+    private boolean isLeft(Node parrent, Node head) {
+        return parrent.left.equals(head);
+    }
+
+
+    public boolean set(Integer key, T newValue) {
+        if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
+        return set(root, key, newValue);
+    }
+
+    private boolean set(Node head, Integer index, T newValue){
+        if (head == null) return false;
+        if (head.index.equals(index)) {
+            head.value = newValue;
+            return true;
+        }
+        if (set(head.left, index, newValue)) return true;
+        else if (set(head.right, index, newValue)) return true;
+        else return false;
+    }
+
+    public Queue<Pair<Integer, T>> preOrder() {
+        Queue<Pair<Integer, T>> result = new Queue<>();
+        if (root == null) return result;
         Stack<Node> nodes = new Stack<>();
         Node current;
         nodes.push(root);
         while (!nodes.empty()) {
             current = nodes.pop();
-            System.out.println(current.index);
+            result.offer(new Pair<>(current.index, current.value));
             if (current.right != null) nodes.push(current.right);
             if (current.left != null) nodes.push(current.left);
         }
+        return result;
     }
 
-    public void inOrder() {
-        if (root == null) return;
+    public Queue<Pair<Integer, T>> inOrder() {
+        Queue<Pair<Integer, T>> result = new Queue<>();
+        if (root == null) return result;
         Stack<Node> nodes = new Stack<>();
         Node current = root;
         do {
             if (current == null) {
                 current = nodes.pop();
-                System.out.println(current.index);
+                result.offer(new Pair<>(current.index, current.value));
                 current = current.right;
             }
             if (current != null) {
@@ -117,10 +184,12 @@ public class BinaryTree<T> {
                 current = current.left;
             }
         } while (!nodes.empty());
+        return result;
     }
 
-    public void postOrder() {
-        if (root == null) return;
+    public Queue<Pair<Integer, T>> postOrder() {
+        Queue<Pair<Integer, T>> result = new Queue<>();
+        if (root == null) return result;
         Stack<Node> nodes = new Stack<>();
         Stack<Node> help = new Stack<>();
         Node current = root;
@@ -132,7 +201,8 @@ public class BinaryTree<T> {
             if (current.right != null) nodes.push(current.right);
         }
         while (!help.empty())
-            System.out.println(help.pop().index);
+            result.offer(new Pair<>(current.index, current.value));
+        return result;
     }
 
     /**
@@ -151,7 +221,7 @@ public class BinaryTree<T> {
         return node;
     }
 
-    private Node getLeftMost(Node head) {
+    public Node getLeftMost(Node head) {
         Node current = head;
         while (current.left != null)
             current = current.left;
@@ -238,14 +308,14 @@ public class BinaryTree<T> {
         if (head == null) {
             return;
         }
-        printInOrder(head.right, height + 1, "v", len);
-        String val = to + head.index + to;
+        printInOrder(head.right, height + 1, "V", len);
+        String val = to + head.index + "," + head.value + to;
         int lenM = val.length();
         int lenL = (len - lenM) / 2;
         int lenR = len - lenM - lenL;
         val = getSpace(lenL) + val + getSpace(lenR);
         System.out.println(getSpace(height * len) + val);
-        printInOrder(head.left, height + 1, "^", len);
+        printInOrder(head.left, height + 1, "Λ", len);
     }
 
     public String getSpace(int num) {
@@ -258,7 +328,7 @@ public class BinaryTree<T> {
     }
 
     public static void main(String[] args) {
-        BinaryTree tree = new BinaryTree();
+        BinaryTree<Integer> tree = new BinaryTree<>();
         tree.insert(28, 1);
         tree.insert(9, 1);
         tree.insert(73, 1);
@@ -267,6 +337,8 @@ public class BinaryTree<T> {
         tree.insert(7, 1);
         tree.insert(54, 1);
         tree.insert(98, 1);
+        tree.printTree();
+        tree.set(999, 2);
         tree.printTree();
     }
 }

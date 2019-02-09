@@ -1,7 +1,7 @@
 package sortAlgorithm;
 
 import sortAlgorithm.bubbleSort.BubbleSort;
-import sortAlgorithm.bucketSort.BucketSort;
+import sortAlgorithm.counterSort.BucketSort;
 import sortAlgorithm.heapSort.HeapSort;
 import sortAlgorithm.insertionSort.InsertionSort;
 import sortAlgorithm.mergeSort.MergeSort;

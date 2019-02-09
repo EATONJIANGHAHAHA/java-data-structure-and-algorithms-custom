@@ -1,8 +1,8 @@
-package sequentialList;
+package list;
 
 public class Stack<T> {
 
-    protected LinkedList<T> list;
+    private LinkedList<T> list;
 
     public Stack() {
         list = new LinkedList<>();
@@ -18,7 +18,7 @@ public class Stack<T> {
 
     public T peek() {
         if (isEmpty()) throw new IndexOutOfBoundsException("This stack is empty.");
-        return list.head.data;
+        return list.get(0);
     }
 
     public void push(T data) {

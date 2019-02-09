@@ -1,7 +1,7 @@
-package sequentialList;
+package list;
 
 /**
- * TODO:改为ArrayList实现
+ * 这是一个定长栈的数组实现
  */
 public class ArrayStack {
 
