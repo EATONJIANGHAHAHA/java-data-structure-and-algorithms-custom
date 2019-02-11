@@ -1,12 +1,12 @@
-package tree;
+package Collections.tree;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
- * 搜索二叉树
- * @param <T>
+ * 搜索二叉树, 同值键将被忽略
+ * @param <I>
  */
-public class BinarySearchTree<T> extends BinaryTree<T> {
+public class BinarySearchTree<I extends Comparable<I>, V> extends BinaryTree<I, V> {
 
     /**
      * 插入一个节点
@@ -14,7 +14,7 @@ public class BinarySearchTree<T> extends BinaryTree<T> {
      * @param value 节点的值
      */
     @Override
-    public void insert(Integer index, T value) {
+    public void insert(I index, V value) {
         Node newNode = new Node(index, value, null, null, null);
         if (root == null) {
             root = newNode;
@@ -22,47 +22,47 @@ public class BinarySearchTree<T> extends BinaryTree<T> {
         }
         Node current = root;
         while (current.left != null && current.right != null) {
-            if (index < current.index) {
+            if (index.compareTo(current.index) < 0) {
                 current = current.left;
-            } else if (index > current.index)
+            } else if (index.compareTo(current.index) > 0)
                 current = current.right;
         }
-        if (index == current.index) return;
+        if (index.compareTo(current.index) == 0) throw new IllegalArgumentException(index + " is already exist.");
         newNode.parrent = current;
-        if (index < current.index) current.left = newNode;
+        if (index.compareTo(current.index) < 0) current.left = newNode;
         else current.right = newNode;
     }
 
     @Override
-    public T find(Integer index) {
+    public V find(I index) {
         Node current = root;
         while (current != null) {
-            if (current.index.equals(index)) return current.value;
-            if (index < current.index) current = current.left;
-            else if (index > current.index) current = current.right;
+            if (index.compareTo(current.index) == 0) return current.value;
+            if (index.compareTo(current.index) < 0) current = current.left;
+            else if (index.compareTo(current.index) > 0) current = current.right;
         }
         return null;
     }
 
     @Override
-    protected Node findNode(Integer index) {
+    protected Node findNode(I index) {
         Node current = root;
         while (current != null) {
-            if (current.index.equals(index)) return current;
-            if (index < current.index) current = current.left;
-            else if (index > current.index) current = current.right;
+            if (index.compareTo(current.index) == 0) return current;
+            if (index.compareTo(current.index) < 0) current = current.left;
+            else if (index.compareTo(current.index) > 0) current = current.right;
         }
         return null;
     }
 
     @Override
-    public T delete(Integer index) {
+    public V delete(I index) {
         if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
         Node current = root;
         while (current != null) {
-            if (current.index.equals(index)) break;
-            if (index < current.index) current = current.left;
-            else if (index > current.index) current = current.right;
+            if (index.compareTo(current.index) == 0) break;
+            if (index.compareTo(current.index) < 0) current = current.left;
+            else if (index.compareTo(current.index) > 0) current = current.right;
         }
         if (current.right == null) {
             if (current.left == null) {}
@@ -71,18 +71,18 @@ public class BinarySearchTree<T> extends BinaryTree<T> {
     }
 
     public static void main(String[] args) {
-        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        BinarySearchTree<Integer, Integer> tree = new BinarySearchTree<>();
         tree.insert(28, 1);
         tree.insert(9, 2);
         tree.insert(73, 3);
         tree.insert(8, 4);
         tree.insert(12, 5);
         tree.insert(7, 6);
-        tree.insert(54, 7);
+        tree.insert(54);
         tree.insert(98, 8);
         tree.insert(98, 9);
-        tree.insert(98, 10);
+        tree.insert(98, 123);
         Integer result = tree.find(5444);
-        tree.printTree();
+        System.out.println(tree);
     }
 }

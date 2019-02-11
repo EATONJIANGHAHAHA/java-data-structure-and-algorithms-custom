@@ -1,4 +1,4 @@
-package list;
+package Collections.stack;
 
 /**
  * 这是一个定长栈的数组实现

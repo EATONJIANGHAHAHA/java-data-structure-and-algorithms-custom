@@ -1,30 +1,54 @@
-package tree;
+package Collections.tree;
 
+import Collections.Iter;
 import com.sun.istack.internal.Nullable;
 import javafx.util.Pair;
-import list.Queue;
+import Collections.Queue.Queue;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Random;
 import java.util.Stack;
 
 /**
- * A binary search tree implementation.
- * @param <T>
+ * A binary search Collections.tree implementation.
+ * @param <I>
  */
-public class BinaryTree<T> implements Tree<T>{
+public class BinaryTree<I, V> implements Tree<I,V>{
 
     protected Node root;
 
+    class BinaryTreeIter implements Iter<V> {
+
+        @Override
+        public boolean hasNext() {
+            throw new NotImplementedException();
+        }
+
+        @Override
+        public V next() {
+            return null;
+        }
+
+        @Override
+        public V getFirst() {
+            return null;
+        }
+    }
+
+    @Override
+    public Iter<V> getIter() {
+        return null;
+    }
+
     public class Node {
 
-        protected Integer index;
-        protected T value;
+        protected I index;
+        protected V value;
         protected Node parrent;
         protected Node left;
         protected Node right;
 
-        protected Node(Integer index, T value, @Nullable Node parrent, @Nullable Node left, @Nullable Node right) {
+        protected Node(I index, V value, @Nullable Node parrent, @Nullable Node left, @Nullable Node right) {
             this.index = index;
             this.value = value;
             this.parrent = parrent;
@@ -39,20 +63,36 @@ public class BinaryTree<T> implements Tree<T>{
      * @return 值
      */
     @Override
-    public T find(Integer index) {
+    public V find(I index) {
         if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
         return find(root, index);
     }
 
     @Override
-    public Queue<Pair<Integer, T>> breadFirst() {
+    public Queue<Pair<I, V>> breadFirst() {
         throw new NotImplementedException();
     }
 
-    private T find(Node head, Integer index) {
+    @Override
+    public boolean contains(I value) {
+        if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
+        return contains(root, value);
+    }
+
+    private boolean contains(Node head, I index) {
+        if (head == null) return false;
+        if (head.index.equals(index)) return true;
+        boolean result = false;
+        result = contains(head.left, index);
+        if (result) return true;
+        return contains(head.right, index);
+
+    }
+
+    private V find(Node head, I index) {
         if (head == null) return null;
         if (head.index.equals(index)) return head.value;
-        T result = null;
+        V result = null;
         result = find(head.left, index);
         if (result != null) return result;
         return find(head.right, index);
@@ -63,12 +103,12 @@ public class BinaryTree<T> implements Tree<T>{
      * @param index
      * @return
      */
-    protected Node findNode(Integer index) {
+    protected Node findNode(I index) {
         if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
         return findNode(root, index);
     }
 
-    private Node findNode(Node head, Integer index) {
+    private Node findNode(Node head, I index) {
         if (head == null) return null;
         if (head.index.equals(index)) return head;
         Node result = null;
@@ -77,7 +117,7 @@ public class BinaryTree<T> implements Tree<T>{
         return findNode(head.right, index);
     }
 
-    public void insert(Integer key) {
+    public void insert(I key) {
         insert(key, null);
     }
 
@@ -91,7 +131,7 @@ public class BinaryTree<T> implements Tree<T>{
      * @param key 节点的键
      * @param value 节点的值
      */
-    public void insert(Integer key, @Nullable T value) {
+    public void insert(I key, @Nullable V value) {
         if (root == null) {
             root = new Node(key, value, null, null, null);
             return;
@@ -114,19 +154,19 @@ public class BinaryTree<T> implements Tree<T>{
      * 删除一个节点，叶节点对接选则完全随机
      * @param index
      */
-    public T delete(Integer index) {
+    public V delete(I index) {
         if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
         return delete(root, index);
     }
 
-    private T delete(Node head, Integer index) {
+    private V delete(Node head, I index) {
         if (head == null) return null;
         if (head.index.equals(index)) {
             if (isLeft(head.parrent, head)) head.parrent.left = null;
             else head.parrent.right = null;
             return head.value;
         }
-        T result = null;
+        V result = null;
         result = delete(head.left, index);
         if (result != null) return result;
         return delete(head.right, index);
@@ -137,12 +177,12 @@ public class BinaryTree<T> implements Tree<T>{
     }
 
 
-    public boolean set(Integer key, T newValue) {
+    public boolean set(I key, V newValue) {
         if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
         return set(root, key, newValue);
     }
 
-    private boolean set(Node head, Integer index, T newValue){
+    private boolean set(Node head, I index, V newValue){
         if (head == null) return false;
         if (head.index.equals(index)) {
             head.value = newValue;
@@ -153,30 +193,30 @@ public class BinaryTree<T> implements Tree<T>{
         else return false;
     }
 
-    public Queue<Pair<Integer, T>> preOrder() {
-        Queue<Pair<Integer, T>> result = new Queue<>();
+    public Queue<Pair<I, V>> preOrder() {
+        Queue<Pair<I, V>> result = new Queue<>();
         if (root == null) return result;
         Stack<Node> nodes = new Stack<>();
         Node current;
         nodes.push(root);
         while (!nodes.empty()) {
             current = nodes.pop();
-            result.offer(new Pair<>(current.index, current.value));
+            result.add(new Pair<>(current.index, current.value));
             if (current.right != null) nodes.push(current.right);
             if (current.left != null) nodes.push(current.left);
         }
         return result;
     }
 
-    public Queue<Pair<Integer, T>> inOrder() {
-        Queue<Pair<Integer, T>> result = new Queue<>();
+    public Queue<Pair<I, V>> inOrder() {
+        Queue<Pair<I, V>> result = new Queue<>();
         if (root == null) return result;
         Stack<Node> nodes = new Stack<>();
         Node current = root;
         do {
             if (current == null) {
                 current = nodes.pop();
-                result.offer(new Pair<>(current.index, current.value));
+                result.add(new Pair<>(current.index, current.value));
                 current = current.right;
             }
             if (current != null) {
@@ -187,8 +227,8 @@ public class BinaryTree<T> implements Tree<T>{
         return result;
     }
 
-    public Queue<Pair<Integer, T>> postOrder() {
-        Queue<Pair<Integer, T>> result = new Queue<>();
+    public Queue<Pair<I, V>> postOrder() {
+        Queue<Pair<I, V>> result = new Queue<>();
         if (root == null) return result;
         Stack<Node> nodes = new Stack<>();
         Stack<Node> help = new Stack<>();
@@ -201,7 +241,7 @@ public class BinaryTree<T> implements Tree<T>{
             if (current.right != null) nodes.push(current.right);
         }
         while (!help.empty())
-            result.offer(new Pair<>(current.index, current.value));
+            result.add(new Pair<>(current.index, current.value));
         return result;
     }
 
@@ -294,28 +334,26 @@ public class BinaryTree<T> implements Tree<T>{
     /**
      * 打印一棵树, H表示头,^表示这个节点的头是在上一层的靠上位置, v表示这个节点的头是再上一层的考下位置.
      */
-    public void printTree() {
-        printTree(root);
+
+    private String printTree(Node head) {
+        return printInOrder(head, 0, "H", 17).toString();
     }
 
-    private void printTree(Node head) {
-        System.out.println("Binary Tree:");
-        printInOrder(head, 0, "H", 17);
-        System.out.println();
-    }
-
-    private void printInOrder(Node head, int height, String to, int len) {
+    private StringBuilder printInOrder(Node head, int height, String to, int len) {
+        StringBuilder stringBuilder = new StringBuilder();
         if (head == null) {
-            return;
+            return stringBuilder;
         }
-        printInOrder(head.right, height + 1, "V", len);
+        stringBuilder.append(printInOrder(head.right, height + 1, "V", len));
         String val = to + head.index + "," + head.value + to;
         int lenM = val.length();
         int lenL = (len - lenM) / 2;
         int lenR = len - lenM - lenL;
         val = getSpace(lenL) + val + getSpace(lenR);
-        System.out.println(getSpace(height * len) + val);
-        printInOrder(head.left, height + 1, "Λ", len);
+        //System.out.println(getSpace(height * len) + val); // /n
+        stringBuilder.append(getSpace(height * len) + val + "\n");
+        stringBuilder.append(printInOrder(head.left, height + 1, "Λ", len));
+        return stringBuilder;
     }
 
     public String getSpace(int num) {
@@ -327,8 +365,13 @@ public class BinaryTree<T> implements Tree<T>{
         return buf.toString();
     }
 
+    @Override
+    public String toString() {
+        return printTree(root);
+    }
+
     public static void main(String[] args) {
-        BinaryTree<Integer> tree = new BinaryTree<>();
+        BinaryTree<Integer, Integer> tree = new BinaryTree<>();
         tree.insert(28, 1);
         tree.insert(9, 1);
         tree.insert(73, 1);
@@ -337,8 +380,6 @@ public class BinaryTree<T> implements Tree<T>{
         tree.insert(7, 1);
         tree.insert(54, 1);
         tree.insert(98, 1);
-        tree.printTree();
-        tree.set(999, 2);
-        tree.printTree();
+        System.out.println(tree);
     }
 }

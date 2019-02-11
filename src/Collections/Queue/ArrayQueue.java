@@ -1,4 +1,4 @@
-package list;
+package Collections.Queue;
 
 /**
  * 这是一个定向定长循环队列的数组实现

@@ -1,8 +1,8 @@
-package list;
+package Collections.list;
 
-public interface List<T> {
+import Collections.Collections;
 
-    class Node {}
+public interface List<T> extends Collections<T> {
 
     boolean isEmpty();
 
@@ -10,9 +10,11 @@ public interface List<T> {
 
     Integer size();
 
-    void add(Integer index, T data);
+    void add(T data);
 
-    T remove(Integer index);
+    T remove();
+
+    T peek();
 
     boolean set(T oldData, T newData);
 
@@ -21,4 +23,6 @@ public interface List<T> {
     T get (Integer index);
 
     Integer indexOf(T data);
+
+    T remove(T data);
 }

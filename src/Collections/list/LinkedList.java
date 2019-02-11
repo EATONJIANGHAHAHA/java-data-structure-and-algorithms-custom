@@ -1,6 +1,9 @@
-package list;
+package Collections.list;
 
+import Collections.Iter;
 import com.sun.istack.internal.Nullable;
+
+import java.util.NoSuchElementException;
 
 /**
  * 单端单项链表实现
@@ -8,18 +11,63 @@ import com.sun.istack.internal.Nullable;
  */
 public class LinkedList<T> implements List<T>{
 
-    private Node head;
-    private int size = 0;
+    Node head;
+    protected int size = 0;
+    private ListIter itr;
 
-    public class Node extends List.Node {
+    /**
+     * 内部维护的节点
+     */
+    class Node {
 
-        private T data;
-        private Node next;
+        T data;
+        Node next;
+        Node previous;
 
-        Node(T data, @Nullable Node next) {
+        Node(T data, @Nullable Node next, @Nullable Node previous) {
             this.data = data;
             this.next = next;
+            this.previous = previous;
         }
+    }
+
+    /**
+     * 定制的迭代器， 客户端程序猿可以进行对封装过的泛型数据进行迭代访问。
+     */
+    class ListIter implements Iter<T> {
+
+        Node current;
+        int index;
+
+        public ListIter() { this.current = head; }
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        /**
+         * 返回下一个节点的值，并移动到下一个节点
+         * @return
+         */
+        @Override
+        public T next() {
+            assert !hasNext() : "iter is at it's last position.";
+            current = current.next;
+            index++;
+            return current.data;
+        }
+
+        @Override
+        public T getFirst() {
+            assert isEmpty() : "list is empty.";
+            return head.data;
+        }
+    }
+
+    public Iter<T> getIter() {
+        if (itr == null) itr = new ListIter();
+        return itr;
     }
 
     /**
@@ -38,12 +86,10 @@ public class LinkedList<T> implements List<T>{
      * @param index
      * @return
      */
-    @Override
     public T get(Integer index) {
         if (!checkIndex(index))
-            throw new IndexOutOfBoundsException(index + ", with actual maximum index: " + (size() - 1));
-        Node current = head;
-        for (int i = 0; i < index; i++) current = current.next;
+            throw new IndexOutOfBoundsException(index.toString());
+        Node current = node(index);
         return current.data;
     }
 
@@ -53,7 +99,6 @@ public class LinkedList<T> implements List<T>{
      * @param data
      * @return
      */
-    @Override
     public Integer indexOf(T data) {
         Node current = head;
         for (int index = 0; current != null; index++) {
@@ -81,23 +126,22 @@ public class LinkedList<T> implements List<T>{
      */
     @Override
     public boolean contains(T data) {
-        if (isEmpty()) throw new RuntimeException("The list is empty.");
-        Node current = head;
-        while (!current.data.equals(data)) current = current.next;
-        if (current != null) return true;
-        else return false;
+        if (isEmpty()) throw new NoSuchElementException();
+        Node current = node(data);
+        return current != null;
     }
 
-    /**
-     * 返回给定数据项的第一个节点
-     *
-     * @param data
-     * @return
-     */
-    private Node node(T data) {
-        if (isEmpty()) throw new RuntimeException("The list is empty.");
+    protected Node node(T data) {
+        if (isEmpty()) throw new NoSuchElementException();
         Node current = head;
         while (!current.data.equals(data)) current = current.next;
+        return current;
+    }
+
+    protected Node node(Integer index) {
+        if (isEmpty()) throw new NoSuchElementException();
+        Node current = head;
+        for (int i = 0; i < index; i++) current = current.next;
         return current;
     }
 
@@ -111,13 +155,8 @@ public class LinkedList<T> implements List<T>{
         return size;
     }
 
-    @Override
-    public void add(Integer index, Object data) {
-
-    }
-
     private void addFirstElement(T data) {
-        head = new Node(data, null);
+        head = new Node(data, null, null);
         size++;
     }
 
@@ -128,7 +167,7 @@ public class LinkedList<T> implements List<T>{
      */
     public void add(T data) {
         if (!isEmpty()) {
-            Node newNode = new Node(data, head);
+            Node newNode = new Node(data, head, null);
             head = newNode;
             size++;
         } else addFirstElement(data);
@@ -137,56 +176,45 @@ public class LinkedList<T> implements List<T>{
     /**
      * 向链表的某一下标后添加元素
      *
-     * @param data
-     * @param index
+     * @param insertAfter
+     * @param newData
      */
-    public void add(T data, Integer index) {
-        if (!isEmpty()) {
-            if (!checkIndex(index)) throw new IndexOutOfBoundsException(index + ", with actual maximum index: " + (size() - 1));
-            Node newNode = new Node(data, null), current = head;
-            int count = 0;
-            while (count < index) {
-                current = current.next;
-                count++;
-            }
+    public void add(T insertAfter, T newData) {
+        if (contains(newData)) {
+            final Node newNode = new Node(insertAfter, null, null), current = node(newData);
             newNode.next = current.next;
             current.next = newNode;
             size++;
-        } else addFirstElement(data);
+        } else addFirstElement(insertAfter);
     }
 
     /**
      * 从链表头移除元素
      */
     public T remove() {
-        if (isEmpty())
-            throw new IndexOutOfBoundsException("This list is already empty.");
+        if (isEmpty()) throw new NoSuchElementException();
         T data = head.data;
         head = head.next;
         size--;
         return data;
     }
 
+    @Override
+    public T peek() {
+        return head.data;
+    }
+
     /**
-     * 移除链表中指定位置的元素
-     * @param index
+     * 移除制定值的节点
+     * @param data
      * @return
      */
-    @Override
-    public T remove(Integer index) {
-        if (isEmpty())
-            throw new IndexOutOfBoundsException("This list is already empty.");
-        int count = 0;
-        Node current = head, previous = null;
-        while (count < index) {
-            previous = current;
-            current = current.next;
-            count++;
-        }
-        T data = current.data;
+    public T remove(T data) {
+        if (isEmpty()) throw new NoSuchElementException();
+        Node current = node(data);
+        Node previous = current.previous;
         previous.next = current.next;
-        size--;
-        return data;
+        return current.data;
     }
 
     /**
@@ -195,11 +223,9 @@ public class LinkedList<T> implements List<T>{
      * @param newData
      * @return
      */
-    @Override
     public boolean set(Integer index, T newData){
         if (!checkIndex(index) && index < 0) throw new IndexOutOfBoundsException();
-        Node current = head;
-        for (int i = 0; i < index; i ++) current = current.next;
+        Node current = node(index);
         if (current == null) return false;
         current.data = newData;
         return true;
@@ -211,12 +237,8 @@ public class LinkedList<T> implements List<T>{
      * @param newData
      * @return
      */
-    @Override
     public boolean set(T oldData, T newData) {
-        Node current = head;
-        int count = 0;
-        while (!current.data.equals(oldData) && checkIndex(count))
-            current = current.next;
+        Node current = node(oldData);
         if (current.data.equals(oldData)) {
             current.data = newData;
             return true;
@@ -242,6 +264,17 @@ public class LinkedList<T> implements List<T>{
         head = current;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Node current = head;
+        for (int i = 0; i < size; i++) {
+            stringBuilder.append(current.data + "  ");
+            current = current.next;
+        }
+        return stringBuilder.toString();
+    }
+
     public static void main(String[] args) {
         LinkedList<Integer> linkedList = new LinkedList<>();
         linkedList.add(1);
@@ -250,5 +283,6 @@ public class LinkedList<T> implements List<T>{
         linkedList.add(4);
         linkedList.add(5);
         linkedList.add(7, 4);
+        System.out.println(linkedList);
     }
 }
