@@ -8,19 +8,15 @@ public interface List<T> extends Collections<T> {
 
     boolean contains(T data);
 
-    Integer size();
+    int size();
 
     void add(T data);
 
     T remove();
 
-    T peek();
+    boolean set(int index, T newData);
 
-    boolean set(T oldData, T newData);
-
-    boolean set(Integer index, T newData);
-
-    T get (Integer index);
+    T get (int index);
 
     Integer indexOf(T data);
 

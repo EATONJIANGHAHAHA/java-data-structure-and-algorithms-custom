@@ -86,9 +86,9 @@ public class LinkedList<T> implements List<T>{
      * @param index
      * @return
      */
-    public T get(Integer index) {
+    public T get(int index) {
         if (!checkIndex(index))
-            throw new IndexOutOfBoundsException(index.toString());
+            throw new IndexOutOfBoundsException(String.valueOf(index));
         Node current = node(index);
         return current.data;
     }
@@ -151,7 +151,7 @@ public class LinkedList<T> implements List<T>{
      * @return
      */
     @Override
-    public Integer size() {
+    public int size() {
         return size;
     }
 
@@ -199,11 +199,6 @@ public class LinkedList<T> implements List<T>{
         return data;
     }
 
-    @Override
-    public T peek() {
-        return head.data;
-    }
-
     /**
      * 移除制定值的节点
      * @param data
@@ -223,7 +218,7 @@ public class LinkedList<T> implements List<T>{
      * @param newData
      * @return
      */
-    public boolean set(Integer index, T newData){
+    public boolean set(int index, T newData){
         if (!checkIndex(index) && index < 0) throw new IndexOutOfBoundsException();
         Node current = node(index);
         if (current == null) return false;

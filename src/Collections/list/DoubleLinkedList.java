@@ -55,8 +55,8 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      * @return
      */
     @Override
-    public T get(Integer index) {
-        if (!checkIndex(index)) throw new IndexOutOfBoundsException(index.toString());
+    public T get(int index) {
+        if (!checkIndex(index)) throw new IndexOutOfBoundsException(String.valueOf(index));
         Node current = node(index);
         return current.data;
     }
@@ -89,7 +89,7 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      * @return
      */
     @Override
-    public Integer size() {
+    public int size() {
         return size;
     }
 
