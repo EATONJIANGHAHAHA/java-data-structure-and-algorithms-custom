@@ -28,19 +28,23 @@ public class BucketSort {
     public static int[] sort(int[] array) {
         int[] range = getRange(array);
         MaxMinLinkedList[] buckets = getBuckets(getBucketNumber(range[0] - range[1]));
+        long startTime = System.currentTimeMillis();
         for (int number : array) {
             int index = getBucketIndex(number, range[0], range[1], buckets.length - 1);
             buckets[index].add(number);
         }
+        long endTime = System.currentTimeMillis();
         int index = 0;
         for (MaxMinLinkedList bucket : buckets) {
             if (!bucket.list.isEmpty()) {
                 bucket = sort(bucket);
-                while (!bucket.list.isEmpty())
+                while (!bucket.list.isEmpty()) {
                     array[index++] = bucket.list.remove();
+                }
             }
         }
         System.out.println("BucketSort:");
+        System.out.println(endTime - startTime);
         return array;
     }
 
@@ -84,10 +88,10 @@ public class BucketSort {
     }
 
     private static int getBucketNumber(int range) {
-        return range + 1;
+        return 2000 + 1;
     }
 
     public static void main(String[] args) {
-        sort(new int[]{20, 9, 5, 11, 14, 8, 2, 1, 19, 5, 3, 7, 17, 0});
+        sort(new int[]{20, -9, 5, 11, 14, 8, 2, 1, 19, 5, 3, 7, 17, 0});
     }
 }

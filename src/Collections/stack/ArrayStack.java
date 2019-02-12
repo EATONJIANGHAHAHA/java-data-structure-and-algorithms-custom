@@ -1,36 +1,56 @@
 package Collections.stack;
 
+import Collections.Iter;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 /**
  * 这是一个定长栈的数组实现
  */
-public class ArrayStack {
+public class ArrayStack<T> implements Stack<T>{
 
-    protected Integer[] array;
+    protected Object[] array;
     protected int index;
 
     public ArrayStack(int size){
-        if (size < 0) throw new IllegalArgumentException("The size of the stack must be bigger than 0");
-        array = new Integer[size];
+        if (size < 0) throw new IllegalArgumentException();
+        array = new Object[size];
         index = 0;
     }
 
-    public Integer peek() {
-        if (index == 0) return null;
-        return array[index -1];
+    @Override
+    public boolean isEmpty() {
+        return index == 0;
     }
 
-    public void push(Integer object) {
-        if (index == array.length) throw new ArrayIndexOutOfBoundsException("This stack is full.");
+    @Override
+    public boolean contains(T data) {
+        for (Object o : array)
+            if (o.equals(data)) return true;
+        return false;
+    }
+
+    @Override
+    public Integer size() {
+        return index + 1;
+    }
+
+    public T peek() {
+        if (index == 0) return null;
+        return (T) array[index -1];
+    }
+
+    public void push(T object) {
+        if (index == array.length) throw new ArrayIndexOutOfBoundsException();
         array[index++] = object;
     }
 
-    public Integer pop() {
-        if (index == 0) throw new ArrayIndexOutOfBoundsException("This stack is empty.");
-        return array[--index];
+    public T pop() {
+        if (index == 0) throw new ArrayIndexOutOfBoundsException();
+        return (T) array[--index];
     }
 
-    public static void main(String[] args) {
-        ArrayStack stack = new ArrayStack(5);
-
+    @Override
+    public Iter<T> getIter() {
+        throw new NotImplementedException();
     }
 }

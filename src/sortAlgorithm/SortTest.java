@@ -23,7 +23,7 @@ public class SortTest {
         System.out.println("Generating numbers for calculations");
         for (int i = sample.length - 1; i > 0; i--) {
             //array[i] = i;
-            sample[i] = random.nextInt(999);
+            sample[i] = random.nextInt(999999);
         }
         System.out.println("Done generate numbers");
 
