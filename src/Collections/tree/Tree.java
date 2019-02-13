@@ -2,7 +2,7 @@ package Collections.tree;
 
 import Collections.Collections;
 import javafx.util.Pair;
-import Collections.Queue.Queue;
+import Collections.Queue.LinkedListQueue;
 
 public interface Tree<I, V> extends Collections<V> {
 
@@ -16,7 +16,7 @@ public interface Tree<I, V> extends Collections<V> {
 
     V find(I index);
 
-    Queue<Pair<I, V>> breadFirst();
+    LinkedListQueue<Pair<I, V>> breadFirst();
 
     boolean contains(I index);
 }

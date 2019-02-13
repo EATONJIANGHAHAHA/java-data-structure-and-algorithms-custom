@@ -46,7 +46,7 @@ public class LinkedListMap<K, V> implements Map<K, V> {
 
     @Override
     public V remove(K key) {
-        return list.remove(pair(key)).value;
+        return list.remove(list.indexOf(pair(key))).value;
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface List<T> extends Collections<T> {
 
     void add(T data);
 
-    T remove();
+    void add(int index, T data);
 
     boolean set(int index, T newData);
 
@@ -20,5 +20,7 @@ public interface List<T> extends Collections<T> {
 
     Integer indexOf(T data);
 
-    T remove(T data);
+    T remove();
+
+    T remove(int index);
 }

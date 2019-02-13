@@ -1,58 +1,18 @@
 package Collections.Queue;
 
-import Collections.Iter;
-import Collections.list.DoubleLinkedList;
-import Collections.list.List;
+import Collections.Collections;
 
-import java.util.NoSuchElementException;
+public interface Queue<T> extends Collections<T> {
 
-/**
- * 这是一个循环队列的链表实现
- * @param <T>
- */
-public class Queue<T>{
+    boolean isEmpty();
 
-    private DoubleLinkedList<T> list;
-    private Iter<T> iter;
+    boolean contains(T data);
 
-    class QueueIter implements Iter<T> {
+    Integer size();
 
-        Iter<T> listIter;
+    void offer(T data);
 
-        public QueueIter () { listIter = list.getIter(); }
+    T poll();
 
-        @Override
-        public boolean hasNext() { return listIter.hasNext(); }
-
-        @Override
-        public T next() { return listIter.next(); }
-
-        @Override
-        public T getFirst() { return listIter.getFirst(); }
-    }
-
-    public Queue() { list = new DoubleLinkedList<>(); }
-
-    public boolean isEmpty() { return list.isEmpty(); }
-
-    public boolean contains(T data) { return false; }
-
-    public Integer size() { return list.size(); }
-
-    public void add(T data) { list.addFirst(data); }
-
-    public T remove() {
-        if (isEmpty()) throw new NoSuchElementException();
-        return list.remove();
-    }
-
-    public T peek() {
-        if (isEmpty()) throw new NoSuchElementException();
-        return list.getLast();
-    }
-
-    public Iter<T> getIter() {
-        if (iter == null) iter = new QueueIter();
-        return iter;
-    }
+    T peek();
 }

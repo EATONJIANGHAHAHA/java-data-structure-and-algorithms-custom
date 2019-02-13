@@ -14,34 +14,46 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
     protected Node tail;
     private Iter<T> decendingIter;
 
-    class DecendingListIter extends LinkedList<T>.ListIter {
+    class DecendingLinkedListIter implements Iter<T> {
 
-        public DecendingListIter() {
+        Node current;
+        int index;
+
+        public DecendingLinkedListIter() {
             current = tail;
             index = size - 1;
         }
 
-        @Override
         public boolean hasNext() {
             return index > 0;
         }
 
-        @Override
         public T next() {
             assert !hasNext() : "iter is at it's first position.";
             current = current.previous;
+            index --;
             return current.data;
         }
 
-        @Override
+        public T previous() {
+            if (!hasPrevious()) throw new NoSuchElementException();
+            current = current.next;
+            index ++;
+            return current.data;
+        }
+
+        private boolean hasPrevious() {
+            return index < size - 1;
+        }
+
         public T getFirst() {
+            if (isEmpty()) throw new NoSuchElementException();
             return tail.data;
         }
     }
 
     public Iter<T> getDIter() {
-        if (decendingIter == null) decendingIter = new DecendingListIter();
-        return decendingIter;
+        return new DecendingLinkedListIter();
     }
 
     private boolean checkIndex(Integer index) {
@@ -54,7 +66,6 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      * @param index
      * @return
      */
-    @Override
     public T get(int index) {
         if (!checkIndex(index)) throw new IndexOutOfBoundsException(String.valueOf(index));
         Node current = node(index);
@@ -77,7 +88,6 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      * @param data
      * @return
      */
-    @Override
     public boolean contains(T data) {
         Node current = node(data);
         return current != null;
@@ -88,7 +98,6 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      *
      * @return
      */
-    @Override
     public int size() {
         return size;
     }
@@ -98,7 +107,6 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      *
      * @return
      */
-    @Override
     public boolean isEmpty() {
         return head == null;
     }
@@ -138,19 +146,18 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
     }
 
     /**
-     * 向链表中的一个位置添加元素
+     * 向链表中的给定位置后添加元素
      *
-     * @param insertAfter
+     * @param index
      */
-    @Override
-    public void add(T insertAfter, T newData) {
-        if (contains(newData)) {
-            final Node current = node(newData), newNode = new Node(insertAfter, current.next, current);
+    public void add(int index, T data) {
+        if (checkIndex(index)) {
+            final Node current = node(index), newNode = new Node(data, current.next, current);
             current.next.previous = newNode;
             current.next = newNode;
             if (current.equals(tail)) tail = newNode;
             size++;
-        } else addFirstElement(insertAfter);
+        } else addFirstElement(data);
     }
 
     private T removeLastElement() {
@@ -164,14 +171,13 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      * 移除链表尾部元素
      * @return
      */
-    @Override
     public T remove() {
         T result = null;
         if (!isEmpty()) {
             if (size > 1) {
                 Node current = tail;
                 result = current.data;
-                tail = current.next;
+                tail = current.previous;
                 current.next.previous = current.previous;
                 current.previous.next = current.next;
                 size--;
@@ -191,7 +197,7 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
             if (size > 1) {
                 Node current = head;
                 result = current.data;
-                head = current.previous;
+                head = current.next;
                 current.next.previous = current.previous;
                 current.previous.next = current.next;
                 size--;
@@ -202,15 +208,14 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
 
     /**
      * 移除链表中第一次遇到给定值的元素
-     * @param data
+     * @param index
      * @return
      */
-    @Override
-    public T remove(T data) {
+    public T remove(int index) {
         T result = null;
         if (!isEmpty()) {
             if (size > 1) {
-                Node current = node(data);
+                Node current = node(index);
                 result = current.data;
                 current.next.previous = current.previous;
                 current.previous.next = current.next;

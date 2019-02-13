@@ -13,7 +13,7 @@ public class LinkedList<T> implements List<T>{
 
     Node head;
     protected int size = 0;
-    private ListIter itr;
+    private LinkedListIter itr;
 
     /**
      * 内部维护的节点
@@ -34,16 +34,16 @@ public class LinkedList<T> implements List<T>{
     /**
      * 定制的迭代器， 客户端程序猿可以进行对封装过的泛型数据进行迭代访问。
      */
-    class ListIter implements Iter<T> {
+    class LinkedListIter implements Iter<T> {
 
         Node current;
         int index;
 
-        public ListIter() { this.current = head; }
+        public LinkedListIter() { this.current = head; }
 
         @Override
         public boolean hasNext() {
-            return index < size;
+            return index < size - 1;
         }
 
         /**
@@ -52,7 +52,7 @@ public class LinkedList<T> implements List<T>{
          */
         @Override
         public T next() {
-            assert !hasNext() : "iter is at it's last position.";
+            if (!hasNext()) throw new NoSuchElementException();
             current = current.next;
             index++;
             return current.data;
@@ -60,14 +60,13 @@ public class LinkedList<T> implements List<T>{
 
         @Override
         public T getFirst() {
-            assert isEmpty() : "list is empty.";
+            if (isEmpty()) throw new NoSuchElementException();
             return head.data;
         }
     }
 
     public Iter<T> getIter() {
-        if (itr == null) itr = new ListIter();
-        return itr;
+        return new LinkedListIter();
     }
 
     /**
@@ -134,12 +133,15 @@ public class LinkedList<T> implements List<T>{
     protected Node node(T data) {
         if (isEmpty()) throw new NoSuchElementException();
         Node current = head;
-        while (!current.data.equals(data)) current = current.next;
-        return current;
+        int index = 0;
+        while (!current.data.equals(data) && index ++ != size)
+            current = current.next;
+        return current.data.equals(data) ? current : null;
     }
 
     protected Node node(Integer index) {
         if (isEmpty()) throw new NoSuchElementException();
+        if (!checkIndex(index)) throw new IndexOutOfBoundsException();
         Node current = head;
         for (int i = 0; i < index; i++) current = current.next;
         return current;
@@ -176,16 +178,17 @@ public class LinkedList<T> implements List<T>{
     /**
      * 向链表的某一下标后添加元素
      *
-     * @param insertAfter
-     * @param newData
+     * @param index
+     * @param data
      */
-    public void add(T insertAfter, T newData) {
-        if (contains(newData)) {
-            final Node newNode = new Node(insertAfter, null, null), current = node(newData);
+    public void add(int index, T data) {
+        if (checkIndex(index)) {
+            Node current = node(index);
+            final Node newNode = new Node(data, null, null);
             newNode.next = current.next;
             current.next = newNode;
             size++;
-        } else addFirstElement(insertAfter);
+        } else addFirstElement(data);
     }
 
     /**
@@ -201,12 +204,12 @@ public class LinkedList<T> implements List<T>{
 
     /**
      * 移除制定值的节点
-     * @param data
+     * @param index
      * @return
      */
-    public T remove(T data) {
+    public T remove(int index) {
         if (isEmpty()) throw new NoSuchElementException();
-        Node current = node(data);
+        Node current = node(index);
         Node previous = current.previous;
         previous.next = current.next;
         return current.data;
