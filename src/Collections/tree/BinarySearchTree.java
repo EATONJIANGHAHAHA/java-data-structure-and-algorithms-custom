@@ -1,5 +1,6 @@
 package Collections.tree;
 
+import Collections.Queue.Queue;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -27,7 +28,10 @@ public class BinarySearchTree<I extends Comparable<I>, V> extends BinaryTree<I, 
             } else if (index.compareTo(current.index) > 0)
                 current = current.right;
         }
-        if (index.compareTo(current.index) == 0) throw new IllegalArgumentException(index + " is already exist.");
+        if (index.compareTo(current.index) == 0) {
+            set(current.index, value);
+            return;
+        }
         newNode.parrent = current;
         if (index.compareTo(current.index) < 0) current.left = newNode;
         else current.right = newNode;
@@ -80,9 +84,11 @@ public class BinarySearchTree<I extends Comparable<I>, V> extends BinaryTree<I, 
         tree.insert(7, 6);
         tree.insert(54);
         tree.insert(98, 8);
-        tree.insert(98, 9);
-        tree.insert(98, 123);
+        tree.insert(98, 7499);
+        tree.insert(60, 111);
         Integer result = tree.find(5444);
         System.out.println(tree);
+        Queue queue = tree.breadthFirst();
+        System.out.println(queue);
     }
 }

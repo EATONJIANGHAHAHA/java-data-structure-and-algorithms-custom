@@ -4,6 +4,8 @@ import Collections.Iter;
 import Collections.list.DoubleLinkedList;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Iterator;
+
 public class LinkedListMap<K, V> implements Map<K, V> {
 
     DoubleLinkedList<Pair> list;
@@ -22,7 +24,7 @@ public class LinkedListMap<K, V> implements Map<K, V> {
 
     protected Pair pair(K key) {
         int i = 0;
-        Iter<Pair> it = list.getIter();
+        Iterator<Pair> it = list.iterator();
         while (it.hasNext()) {
             Pair pair = it.next();
             if (pair.key.equals(key)) return pair;
@@ -35,7 +37,7 @@ public class LinkedListMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Iter<V> getIter() {
+    public Iterator<V> iterator() {
         throw new NotImplementedException();
     }
 

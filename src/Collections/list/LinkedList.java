@@ -1,8 +1,10 @@
 package Collections.list;
 
+import Collections.Collections;
 import Collections.Iter;
 import com.sun.istack.internal.Nullable;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -13,7 +15,6 @@ public class LinkedList<T> implements List<T>{
 
     Node head;
     protected int size = 0;
-    private LinkedListIter itr;
 
     /**
      * 内部维护的节点
@@ -34,12 +35,15 @@ public class LinkedList<T> implements List<T>{
     /**
      * 定制的迭代器， 客户端程序猿可以进行对封装过的泛型数据进行迭代访问。
      */
-    class LinkedListIter implements Iter<T> {
+    class LinkedListIterator implements Iterator<T> {
 
         Node current;
         int index;
 
-        public LinkedListIter() { this.current = head; }
+        public LinkedListIterator() {
+            this.current = new Node(null, head, null);
+            index = -1;
+        }
 
         @Override
         public boolean hasNext() {
@@ -57,16 +61,6 @@ public class LinkedList<T> implements List<T>{
             index++;
             return current.data;
         }
-
-        @Override
-        public T getFirst() {
-            if (isEmpty()) throw new NoSuchElementException();
-            return head.data;
-        }
-    }
-
-    public Iter<T> getIter() {
-        return new LinkedListIter();
     }
 
     /**
@@ -191,6 +185,11 @@ public class LinkedList<T> implements List<T>{
         } else addFirstElement(data);
     }
 
+    @Override
+    public void addAll(Collections<? extends T> items) {
+        for (T item : items) add(item);
+    }
+
     /**
      * 从链表头移除元素
      */
@@ -272,6 +271,12 @@ public class LinkedList<T> implements List<T>{
         }
         return stringBuilder.toString();
     }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListIterator();
+    }
+
 
     public static void main(String[] args) {
         LinkedList<Integer> linkedList = new LinkedList<>();

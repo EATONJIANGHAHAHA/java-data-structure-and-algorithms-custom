@@ -1,6 +1,5 @@
 package Collections;
 
-public interface Collections<T> {
+public interface Collections<T> extends Iterable<T>{
 
-    Iter<T> getIter();
 }

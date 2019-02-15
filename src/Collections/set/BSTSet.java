@@ -4,6 +4,8 @@ import Collections.Iter;
 import Collections.tree.BinarySearchTree;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Iterator;
+
 public class BSTSet<T extends Comparable<T>> implements Set<T> {
 
     BinarySearchTree<T, T> bst;
@@ -41,7 +43,7 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
     }
 
     @Override
-    public Iter<T> getIter() {
+    public Iterator<T> iterator() {
         throw new NotImplementedException();
     }
 }

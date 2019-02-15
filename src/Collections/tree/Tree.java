@@ -1,6 +1,7 @@
 package Collections.tree;
 
 import Collections.Collections;
+import Collections.Queue.Queue;
 import javafx.util.Pair;
 import Collections.Queue.LinkedListQueue;
 
@@ -12,11 +13,15 @@ public interface Tree<I, V> extends Collections<V> {
 
     V delete(I index);
 
+    V delete();
+
     boolean set(I index, V value);
 
     V find(I index);
 
-    LinkedListQueue<Pair<I, V>> breadFirst();
+    Queue<Pair<I, V>> breadthFirst();
+
+    Queue<Pair<I, V>> inOrder();
 
     boolean contains(I index);
 }

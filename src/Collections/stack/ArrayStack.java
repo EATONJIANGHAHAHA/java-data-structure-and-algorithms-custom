@@ -1,18 +1,20 @@
 package Collections.stack;
 
 import Collections.Iter;
-import Collections.list.ArrayList;
+import Collections.list.Array;
 
-public class ArrayListStack<T> implements Stack<T> {
+import java.util.Iterator;
 
-    ArrayList<T> list = new ArrayList<>();
+public class ArrayStack<T> implements Stack<T> {
 
-    class ArrayListStackIter implements Iter<T> {
+    Array<T> array = new Array<>();
 
-        Iter<T> it;
+    class ArrayListStackIter implements Iterator<T> {
+
+        Iterator<T> it;
 
         public ArrayListStackIter() {
-            it = list.getIter();
+            it = array.iterator();
         }
 
         @Override
@@ -24,45 +26,40 @@ public class ArrayListStack<T> implements Stack<T> {
         public T next() {
             return it.next();
         }
-
-        @Override
-        public T getFirst() {
-            return it.getFirst();
-        }
     }
 
     @Override
     public boolean isEmpty() {
-        return list.isEmpty();
+        return array.isEmpty();
     }
 
     @Override
     public boolean contains(T data) {
-        return list.contains(data);
+        return array.contains(data);
     }
 
     @Override
     public Integer size() {
-        return list.size();
+        return array.size();
     }
 
     @Override
     public T peek() {
-        return list.get(list.size() - 1);
+        return array.get(array.size() - 1);
     }
 
     @Override
     public void push(T data) {
-        list.add(data);
+        array.add(data);
     }
 
     @Override
     public T pop() {
-        return list.remove(list.size() - 1);
+        return array.remove(array.size() - 1);
     }
 
     @Override
-    public Iter<T> getIter() {
+    public Iterator<T> iterator() {
         return new ArrayListStackIter();
     }
 }

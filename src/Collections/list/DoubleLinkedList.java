@@ -1,5 +1,6 @@
 package Collections.list;
 
+import Collections.Collections;
 import Collections.Iter;
 
 import java.util.NoSuchElementException;
@@ -133,7 +134,8 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      * @param data
      */
     public void addFirst(T data) {
-        head = linkHeadTail(data);
+        if (isEmpty()) addFirstElement(data);
+        else head = linkHeadTail(data);
     }
 
     /**
@@ -142,7 +144,8 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
      * @param data
      */
     public void add(T data) {
-        tail = linkHeadTail(data);
+        if (isEmpty()) addFirstElement(data);
+        else tail = linkHeadTail(data);
     }
 
     /**
@@ -160,11 +163,16 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
         } else addFirstElement(data);
     }
 
+    public void addAll(Collections<? extends T> items) {
+        for (T item : items) add(item);
+    }
+
     private T removeLastElement() {
+        T data = head.data;
         head = null;
         tail = null;
         size = 0;
-        return null;
+        return data;
     }
 
     /**
@@ -182,7 +190,7 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
                 current.previous.next = current.next;
                 size--;
             }
-            else removeLastElement();
+            else return removeLastElement();
         } else throw new NoSuchElementException();
         return result;
     }
@@ -201,7 +209,7 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
                 current.next.previous = current.previous;
                 current.previous.next = current.next;
                 size--;
-            } else removeLastElement();
+            } else return removeLastElement();
         } else throw new NoSuchElementException();
         return result;
     }
@@ -220,7 +228,7 @@ public class DoubleLinkedList<T> extends LinkedList<T> {
                 current.next.previous = current.previous;
                 current.previous.next = current.next;
                 size--;
-            } else removeLastElement();
+            } else return removeLastElement();
         } else throw new IllegalArgumentException();
         return result;
     }

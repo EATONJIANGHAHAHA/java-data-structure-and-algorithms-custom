@@ -14,6 +14,8 @@ public interface List<T> extends Collections<T> {
 
     void add(int index, T data);
 
+    void addAll(Collections<? extends T> items);
+
     boolean set(int index, T newData);
 
     T get (int index);

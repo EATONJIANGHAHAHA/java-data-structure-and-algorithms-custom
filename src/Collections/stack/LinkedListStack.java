@@ -4,18 +4,19 @@ import Collections.Iter;
 import Collections.list.LinkedList;
 import Collections.list.List;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 public class LinkedListStack<T> implements Stack<T>{
 
     private LinkedList<T> list;
 
-    class StackIter implements Iter<T> {
+    class StackIter implements Iterator<T> {
 
-        Iter<T> listIter;
+        Iterator<T> listIter;
 
         public StackIter() {
-            listIter = list.getIter();
+            listIter = list.iterator();
         }
 
         @Override
@@ -25,11 +26,6 @@ public class LinkedListStack<T> implements Stack<T>{
 
         @Override
         public T next() {
-            return null;
-        }
-
-        @Override
-        public T getFirst() {
             return null;
         }
     }
@@ -64,7 +60,7 @@ public class LinkedListStack<T> implements Stack<T>{
         return list.remove();
     }
 
-    public Iter<T> getIter() {
+    public Iterator<T> iterator() {
         return null;
     }
 }

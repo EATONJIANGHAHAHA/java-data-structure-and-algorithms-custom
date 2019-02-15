@@ -5,6 +5,8 @@ import Collections.Iter;
 import Collections.list.DoubleLinkedList;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Iterator;
+
 public class LinkedListSet<T> implements Set<T> {
 
     DoubleLinkedList<T> list;
@@ -37,7 +39,7 @@ public class LinkedListSet<T> implements Set<T> {
     }
 
     @Override
-    public Iter<T> getIter() {
+    public Iterator<T> iterator() {
         throw new NotImplementedException();
     }
 }

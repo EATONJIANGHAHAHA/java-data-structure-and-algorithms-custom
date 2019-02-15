@@ -3,6 +3,8 @@ package Collections.map;
 import Collections.Iter;
 import Collections.tree.BinarySearchTree;
 
+import java.util.Iterator;
+
 public class BSTMap<K extends Comparable<K>, V> implements Map<K, V>{
 
     BinarySearchTree<K, V> bst;
@@ -52,7 +54,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V>{
     }
 
     @Override
-    public Iter<V> getIter() {
+    public Iterator<V> iterator() {
         return null;
     }
 }

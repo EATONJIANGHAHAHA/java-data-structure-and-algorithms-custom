@@ -2,12 +2,15 @@ package Collections.tree;
 
 import Collections.Iter;
 import Collections.Queue.LinkedListQueue;
+import Collections.Queue.Queue;
+import Collections.stack.LinkedListStack;
+import Collections.stack.Stack;
 import com.sun.istack.internal.Nullable;
 import javafx.util.Pair;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Iterator;
 import java.util.Random;
-import java.util.Stack;
 
 /**
  * A binary search Collections.tree implementation.
@@ -28,15 +31,10 @@ public class BinaryTree<I, V> implements Tree<I,V>{
         public V next() {
             return null;
         }
-
-        @Override
-        public V getFirst() {
-            return null;
-        }
     }
 
     @Override
-    public Iter<V> getIter() {
+    public Iterator<V> iterator() {
         return null;
     }
 
@@ -69,8 +67,22 @@ public class BinaryTree<I, V> implements Tree<I,V>{
     }
 
     @Override
-    public LinkedListQueue<Pair<I, V>> breadFirst() {
-        throw new NotImplementedException();
+    public Queue<Pair<I, V>> breadthFirst() { //todo:
+        Queue<Node> parrents = new LinkedListQueue<>();
+        Queue<Node> children = new LinkedListQueue<>();
+        Queue<Pair<I, V>> result = new LinkedListQueue<>();
+        parrents.offer(root);
+        while (!parrents.isEmpty() || !children.isEmpty()) {
+            while (!parrents.isEmpty()) {
+                Node node = parrents.poll();
+                result.offer(new Pair<>(node.index, node.value));
+                if (node.left != null) children.offer(node.left);
+                if (node.right != null) children.offer(node.right);
+            }
+            parrents = children;
+            children = new LinkedListQueue<>();
+        }
+        return result;
     }
 
     @Override
@@ -159,6 +171,11 @@ public class BinaryTree<I, V> implements Tree<I,V>{
         return delete(root, index);
     }
 
+    @Override
+    public V delete() {
+        return delete(root.index);
+    }
+
     private V delete(Node head, I index) {
         if (head == null) return null;
         if (head.index.equals(index)) {
@@ -196,10 +213,10 @@ public class BinaryTree<I, V> implements Tree<I,V>{
     public LinkedListQueue<Pair<I, V>> preOrder() {
         LinkedListQueue<Pair<I, V>> result = new LinkedListQueue<>();
         if (root == null) return result;
-        Stack<Node> nodes = new Stack<>();
+        Stack<Node> nodes = new LinkedListStack<>();
         Node current;
         nodes.push(root);
-        while (!nodes.empty()) {
+        while (!nodes.isEmpty()) {
             current = nodes.pop();
             result.offer(new Pair<>(current.index, current.value));
             if (current.right != null) nodes.push(current.right);
@@ -211,7 +228,7 @@ public class BinaryTree<I, V> implements Tree<I,V>{
     public LinkedListQueue<Pair<I, V>> inOrder() {
         LinkedListQueue<Pair<I, V>> result = new LinkedListQueue<>();
         if (root == null) return result;
-        Stack<Node> nodes = new Stack<>();
+        Stack<Node> nodes = new LinkedListStack<>();
         Node current = root;
         do {
             if (current == null) {
@@ -223,24 +240,24 @@ public class BinaryTree<I, V> implements Tree<I,V>{
                 nodes.push(current);
                 current = current.left;
             }
-        } while (!nodes.empty());
+        } while (!nodes.isEmpty());
         return result;
     }
 
     public LinkedListQueue<Pair<I, V>> postOrder() {
         LinkedListQueue<Pair<I, V>> result = new LinkedListQueue<>();
         if (root == null) return result;
-        Stack<Node> nodes = new Stack<>();
-        Stack<Node> help = new Stack<>();
+        Stack<Node> nodes = new LinkedListStack<>();
+        Stack<Node> help = new LinkedListStack<>();
         Node current = root;
         nodes.push(current);
-        while (!nodes.empty()) {
+        while (!nodes.isEmpty()) {
             current = nodes.pop();
             help.push(current);
             if (current.left != null) nodes.push(current.left);
             if (current.right != null) nodes.push(current.right);
         }
-        while (!help.empty())
+        while (!help.isEmpty())
             result.offer(new Pair<>(current.index, current.value));
         return result;
     }
@@ -350,7 +367,6 @@ public class BinaryTree<I, V> implements Tree<I,V>{
         int lenL = (len - lenM) / 2;
         int lenR = len - lenM - lenL;
         val = getSpace(lenL) + val + getSpace(lenR);
-        //System.out.println(getSpace(height * len) + val); // /n
         stringBuilder.append(getSpace(height * len) + val + "\n");
         stringBuilder.append(printInOrder(head.left, height + 1, "Λ", len));
         return stringBuilder;

@@ -12,7 +12,10 @@ public interface Queue<T> extends Collections<T> {
 
     void offer(T data);
 
+    void offerAll(Collections<? extends T> items);
+
     T poll();
 
     T peek();
+
 }

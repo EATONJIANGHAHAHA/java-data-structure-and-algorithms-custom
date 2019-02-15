@@ -1,15 +1,18 @@
 package Collections.Queue;
 
+import Collections.Collections;
 import Collections.Iter;
 import Collections.list.DoubleLinkedList;
+
+import java.util.Iterator;
 
 public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
 
     DoubleLinkedList<T> list;
 
-    class ListPriorityQueueIter implements Iter<T> {
+    class ListPriorityQueueIter implements Iterator<T> {
 
-        Iter<T> it = list.getIter();
+        Iterator<T> it = list.iterator();
 
         @Override
         public boolean hasNext() {
@@ -19,11 +22,6 @@ public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
         @Override
         public T next() {
             return it.next();
-        }
-
-        @Override
-        public T getFirst() {
-            return it.getFirst();
         }
     }
 
@@ -56,17 +54,18 @@ public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
         }
     }
 
+    @Override
+    public void offerAll(Collections<? extends T> items) {
+        for (T item : items)
+            offer(item);
+    }
+
     private int getInsertIndex(T data) {
-        Iter<T> it = list.getDIter(); //反向迭代器
-        int index = list.size() - 1;
-        T currentData = it.getFirst();
-        do {
-            if (currentData.compareTo(data) < 0) {
-                currentData = it.next();
-                index --;
-            } else return index;
-        } while (it.hasNext());
-        return -1;
+        Iterator<T> it = list.iterator(); //反向迭代器
+        int index = -1;
+        while (it.hasNext() && it.next().compareTo(data) > 0)
+            index ++;
+        return index;
     }
 
     @Override
@@ -80,16 +79,15 @@ public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
     }
 
     @Override
-    public Iter<T> getIter() {
-        return null;
+    public Iterator<T> iterator() {
+        return new ListPriorityQueueIter();
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        Iter<T> it = list.getIter();
-        stringBuilder.append(it.getFirst()).append(" ");
-        while (it.hasNext()) //todo
+        Iterator<T> it = list.iterator();
+        while (it.hasNext())
             stringBuilder.append(it.next()).append(" ");
         return stringBuilder.toString();
     }
@@ -98,10 +96,13 @@ public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
         ListPriorityQueue<Integer> queue = new ListPriorityQueue<>();
         queue.offer(33);
         queue.offer(34);
-        System.out.println(queue.contains(33));
+        System.out.println(queue);
         queue.offer(12);
+        System.out.println(queue);
         queue.offer(110);
+        System.out.println(queue);
         queue.offer(31);
+        System.out.println(queue);
         queue.offer(1);
         System.out.println(queue + "\n");
         queue.poll();
@@ -110,6 +111,12 @@ public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
         System.out.println(queue);
         System.out.println(queue.peek());
         queue.poll();
+        System.out.println(queue);
+
+        ListPriorityQueue<Integer> queue2 = new ListPriorityQueue<>();
+        queue2.offer(345345345);
+        queue2.offer(11323);
+        queue.offerAll(queue2);
         System.out.println(queue);
     }
 }

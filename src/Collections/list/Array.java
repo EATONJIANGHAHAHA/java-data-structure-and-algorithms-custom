@@ -1,30 +1,33 @@
 package Collections.list;
 
+import Collections.Collections;
 import Collections.Iter;
+import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
  * 动态数组.
  * @param <T>
  */
-public class ArrayList<T> implements List<T> {
+public class Array<T> implements List<T> {
 
-    private Object[] objects = new Object[2];
+    private Object[] objects = new Object[5];
     private int tail, head, size;
-    private Iter<T> it;
     //tail: 下一个要插入的元素索引, head: 下一个要删除的元素索引, size: 结构大小
 
-    class ArrayListIter implements Iter<T> {
+    class ArrayIterator implements Iterator<T> {
 
         int index;
 
-        public ArrayListIter() {
-            index = head;
+        public ArrayIterator() {
+            index = head - 1;
         }
 
         @Override
         public boolean hasNext() {
+            if (tail == 0) return index != 0;
             return index != tail - 1;
         }
 
@@ -34,19 +37,14 @@ public class ArrayList<T> implements List<T> {
             index = index == objects.length - 1 ? 0 : index + 1;
             return (T) objects[index];
         }
-
-        @Override
-        public T getFirst() {
-            return (T) objects[head];
-        }
     }
 
-    public ArrayList() {
-        new ArrayList(10);
+    public Array() {
+        new Array(10);
     }
 
-    public ArrayList(int size) {
-        objects = new Object[size];
+    public Array(int size) {
+        objects = new Object[size + 5];
         tail = 0;
         this.size = 0;
         head = 0;
@@ -69,14 +67,13 @@ public class ArrayList<T> implements List<T> {
 
     private void ensureCapacity() {
         if (size == 0) return;
-        if (size == objects.length) expendCapacity();
+        if (size < objects.length - 2) expendCapacity();
     }
 
     private void expendCapacity() {
         Object[] newArray = new Object[objects.length * 2];
-        Iter it = new ArrayListIter();
-        newArray[0] = it.getFirst();
-        for (int i = 1; it.hasNext(); i ++)
+        Iterator<T> it = new ArrayIterator();
+        for (int i = 0; it.hasNext(); i ++)
             newArray[i] = it.next();
         tail = size;
         head = 0;
@@ -84,8 +81,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     private boolean checkIndex(int index) {
-        index = getInnerIndex(index);
-        return index >= head && index < tail;
+        return index < size;
     }
 
     /**
@@ -130,8 +126,7 @@ public class ArrayList<T> implements List<T> {
      *
      * @param data
      */
-    public void
-    addFront(T data) {
+    public void addFront(T data) {
         ensureCapacity();
         head = (head == 0) ? objects.length - 1 : head - 1;
         objects[head] = data;
@@ -145,11 +140,17 @@ public class ArrayList<T> implements List<T> {
      * @param index
      */
     public void add(int index, T data) {
+        if (!checkIndex(index)) throw new ArrayIndexOutOfBoundsException();
         ensureCapacity();
         int current = getInnerIndex(index) + 1;
         pushPartsOnec(current);
         objects[current] = data;
         size++;
+    }
+
+    @Override
+    public void addAll(Collections<? extends T> items) {
+        for (T item : items) add(item);
     }
 
     private void pushPartsOnec(int current) {
@@ -225,9 +226,8 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public Iter<T> getIter() {
-        if (it == null) it = new ArrayListIter();
-        return it;
+    public Iterator<T> iterator() {
+        return new ArrayIterator();
     }
 
     @Override
@@ -242,9 +242,10 @@ public class ArrayList<T> implements List<T> {
     }
 
     public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
+        Array<Integer> list = new Array<>(6);
         list.addFront(432);
+        list.addFront(1510);
+        list.add(1);
         list.add(34);
         list.add(3);
         list.add(9);
@@ -254,15 +255,23 @@ public class ArrayList<T> implements List<T> {
         list.add(7499);
         System.out.println(list + "\n");
 
+        Array<Integer> list2 = new Array<>();
+        list2.add(11232);
+        list2.add(888);
+
+        list.addAll(list2);
+        System.out.println(list);
+/*
         list.remove();
         list.remove(0);
-        list.remove(new Integer(34));
         list.removeFront();
         list.removeFront();
-        System.out.println(list.indexOf(535));
+        System.out.println(list);
+        System.out.println(list.indexOf(666));
         System.out.println(list.contains(98989898));
         list.add(999999);
-        list.set(4, 7499);
+        list.set(0, 7499);
+        System.out.println(list);
         list.removeFront();
         list.removeFront();
         list.removeFront();
@@ -272,8 +281,8 @@ public class ArrayList<T> implements List<T> {
         list.add(7);
         list.add(0);
         System.out.println(list);
+*/
 
-
-
+        list.add(22);
     }
 }
