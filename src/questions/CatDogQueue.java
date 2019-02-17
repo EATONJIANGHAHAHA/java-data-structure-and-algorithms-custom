@@ -39,7 +39,7 @@ public class CatDogQueue {
     }
 
     public Pet pollAll() {
-        if (isAllEmpty()) throw new RuntimeException("LinkedListQueue Empty.");
+        if (isAllEmpty()) throw new RuntimeException("ListQueue Empty.");
         else if (isDogEmpty() && !isCatEmpty()) return cats.poll().getValue();
         else if (!isDogEmpty() && isCatEmpty()) return dogs.poll().getValue();
         return dogs.peek().getKey() < cats.peek().getKey() ?

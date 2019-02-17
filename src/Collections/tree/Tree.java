@@ -3,13 +3,14 @@ package Collections.tree;
 import Collections.Collections;
 import Collections.Queue.Queue;
 import javafx.util.Pair;
-import Collections.Queue.LinkedListQueue;
 
 public interface Tree<I, V> extends Collections<V> {
 
     boolean isEmpty();
 
     void insert(I index, V value);
+
+    int size();
 
     V delete(I index);
 

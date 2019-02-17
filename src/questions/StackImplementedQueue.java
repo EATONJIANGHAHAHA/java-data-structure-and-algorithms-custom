@@ -12,7 +12,7 @@ public class StackImplementedQueue<T> {
     private Stack<T> pop = new Stack<>();
 
     public T peek() {
-        if (push.isEmpty() && pop.isEmpty()) throw new RuntimeException("LinkedListQueue is empty.");
+        if (push.isEmpty() && pop.isEmpty()) throw new RuntimeException("ListQueue is empty.");
         if (pop.size() == 0) revert();
         return pop.peek();
     }
@@ -22,7 +22,7 @@ public class StackImplementedQueue<T> {
     }
 
     public T pop() {
-        if (push.isEmpty() && pop.isEmpty()) throw new RuntimeException("LinkedListQueue is empty.");
+        if (push.isEmpty() && pop.isEmpty()) throw new RuntimeException("ListQueue is empty.");
         if (pop.size() == 0) revert();
         return pop.pop();
     }

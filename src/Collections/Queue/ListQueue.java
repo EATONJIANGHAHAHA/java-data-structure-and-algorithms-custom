@@ -1,9 +1,7 @@
 package Collections.Queue;
 
 import Collections.Collections;
-import Collections.Iter;
 import Collections.list.DoubleLinkedList;
-import Collections.list.List;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -12,7 +10,7 @@ import java.util.NoSuchElementException;
  * 这是一个循环队列的链表实现
  * @param <T>
  */
-public class LinkedListQueue<T> implements Queue<T>{
+public class ListQueue<T> implements Queue<T>{
 
     private DoubleLinkedList<T> list;
 
@@ -29,7 +27,7 @@ public class LinkedListQueue<T> implements Queue<T>{
         public T next() { return listIter.next(); }
     }
 
-    public LinkedListQueue() { list = new DoubleLinkedList<>(); }
+    public ListQueue() { list = new DoubleLinkedList<>(); }
 
     public boolean isEmpty() { return list.isEmpty(); }
 
@@ -67,7 +65,7 @@ public class LinkedListQueue<T> implements Queue<T>{
     }
 
     public static void main(String[] args) {
-        Queue<Integer> queue = new LinkedListQueue<>();
+        Queue<Integer> queue = new ListQueue<>();
         queue.offer(73);
         queue.offer(66);
         queue.offer(712);

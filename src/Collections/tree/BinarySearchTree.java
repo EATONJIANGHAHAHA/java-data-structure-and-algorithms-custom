@@ -16,6 +16,7 @@ public class BinarySearchTree<I extends Comparable<I>, V> extends BinaryTree<I, 
      */
     @Override
     public void insert(I index, V value) {
+        size ++;
         Node newNode = new Node(index, value, null, null, null);
         if (root == null) {
             root = newNode;

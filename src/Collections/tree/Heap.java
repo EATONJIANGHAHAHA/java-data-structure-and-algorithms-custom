@@ -1,7 +1,7 @@
 package Collections.tree;
 
 import Collections.Queue.ArrayQueue;
-import Collections.Queue.LinkedListQueue;
+import Collections.Queue.ListQueue;
 import Collections.Queue.Queue;
 import Collections.list.Array;
 import javafx.util.Pair;
@@ -17,6 +17,21 @@ import java.util.Iterator;
 public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
 
     Array<Pair<I, V>> array;
+
+    private class HeapIterator implements Iterator<V> {
+
+        int index = 0;
+
+        @Override
+        public boolean hasNext() {
+            return index < array.size();
+        }
+
+        @Override
+        public V next() {
+            return array.get(index ++).getValue();
+        }
+    }
 
     public Heap(int size) {
         array = new Array<>(size);
@@ -83,6 +98,11 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
         heapify(0);
     }
 
+    @Override
+    public int size() {
+        return array.size();
+    }
+
     /**
      * 删除根节点并返回值
      * @param key
@@ -136,7 +156,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
 
     private Queue<Pair<I, V>> inorder(int head) {
         if (!checkIndex(head) || isEmpty()) return null;
-        Queue<Pair<I, V>> result = new LinkedListQueue<>();
+        Queue<Pair<I, V>> result = new ListQueue<>();
         Queue<Pair<I, V>> left = inorder(getLIndex(head));
         if (left != null) result.offerAll(left);
         result.offer(new Pair<>(array.get(head).getKey(), array.get(head).getValue()));
@@ -189,7 +209,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
     }
 
     public static void main(String[] args) {
-        Heap<Integer, Integer> heap = new Heap<>();
+        Tree<Integer, Integer> heap = new Heap<>();
         heap.insert(12, 1);
         heap.insert(1, 1);
         heap.insert(33, 1);
@@ -197,24 +217,10 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
         heap.insert(900, 1);
         heap.insert(2, 1);
         heap.insert(70, 1);
-        System.out.println(heap.printTree(0) + "\n");
         heap.delete();
         System.out.println(heap);
         System.out.println(heap.inOrder());
     }
 
-    private class HeapIterator implements Iterator<V> {
 
-        int index = 0;
-
-        @Override
-        public boolean hasNext() {
-            return index < array.size();
-        }
-
-        @Override
-        public V next() {
-            return array.get(index ++).getValue();
-        }
-    }
 }
