@@ -1,0 +1,52 @@
+package DataStructures.Map.dict;
+
+import DataStructures.Map.tree.BinarySearchTree;
+
+public class BSTDict<K extends Comparable<K>, V> implements Dict<K, V> {
+
+    BinarySearchTree<K, V> bst;
+    int size;
+
+    public BSTDict() {
+        bst = new BinarySearchTree<>();
+        size = 0;
+    }
+
+    @Override
+    public void add(K key, V value) {
+        if (bst.contains(key)) bst.set(key, value);
+        else bst.insert(key, value);
+        size++;
+    }
+
+    @Override
+    public V remove(K key) {
+        size--;
+        return bst.delete(key);
+    }
+
+    @Override
+    public boolean contains(K key) {
+        return bst.contains(key);
+    }
+
+    @Override
+    public V get(K key) {
+        return bst.find(key);
+    }
+
+    @Override
+    public void set(K key, V newValue) {
+        bst.set(key, newValue);
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+}
