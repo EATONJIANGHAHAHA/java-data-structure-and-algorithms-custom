@@ -8,7 +8,7 @@ public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
 
     DoubleLinkedList<T> list;
 
-    class ListPriorityQueueIter implements Iterator<T> {
+    class LPQIterator implements Iterator<T> {
 
         Iterator<T> it = list.iterator();
 
@@ -77,7 +77,7 @@ public class ListPriorityQueue<T extends Comparable<T>> implements Queue<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ListPriorityQueueIter();
+        return new LPQIterator();
     }
 
     @Override

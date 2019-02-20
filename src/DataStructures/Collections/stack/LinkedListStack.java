@@ -8,11 +8,11 @@ public class LinkedListStack<T> implements Stack<T>{
 
     private LinkedList<T> list;
 
-    class StackIter implements Iterator<T> {
+    class LLSIterator implements Iterator<T> {
 
         Iterator<T> listIter;
 
-        public StackIter() {
+        public LLSIterator() {
             listIter = list.iterator();
         }
 
@@ -50,6 +50,11 @@ public class LinkedListStack<T> implements Stack<T>{
 
     public void push(T data) {
         list.add(data);
+    }
+
+    @Override
+    public void pushAll(Stack<? extends T> items) {
+        for (T item : items) push(item);
     }
 
     public T pop() {

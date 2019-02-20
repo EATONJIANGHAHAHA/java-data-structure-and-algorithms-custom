@@ -21,8 +21,6 @@ public interface List<T> extends Collections<T> {
 
     T get (int index);
 
-    Queue<T> getAll();
-
     Integer indexOf(T data);
 
     T remove();

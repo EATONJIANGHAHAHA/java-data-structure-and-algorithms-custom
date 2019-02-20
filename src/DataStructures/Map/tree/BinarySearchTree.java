@@ -1,7 +1,7 @@
 package DataStructures.Map.tree;
 
 import DataStructures.Collections.Queue.Queue;
-import javafx.util.Pair;
+import DataStructures.Pair;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -45,8 +45,8 @@ public class BinarySearchTree<I extends Comparable<I>, V> extends BinaryTree<I, 
 
     @Override
     public void insertAll(Tree<? extends I, ? extends V> items) {
-        for (Pair pair : items.breadthFirst()) {
-            insert((I) pair.getKey(), (V) pair.getValue());
+        for (Pair<? extends I, ? extends V> pair : items.breadthFirst()) {
+            insert(pair.getKey(), pair.getValue());
         }
     }
 

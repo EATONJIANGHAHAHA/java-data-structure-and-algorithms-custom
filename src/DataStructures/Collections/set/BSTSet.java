@@ -10,7 +10,7 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
     BinarySearchTree<T, Void> bst;
     int size = 0;
 
-    class BSTSetIterator implements Iterator<T> {
+    class BSTSIterator implements Iterator<T> {
 
         Iterator<Pair<T, Void>> it = bst.iterator();
 
@@ -36,9 +36,22 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
     }
 
     @Override
+    public void addAll(Set<? extends T> items) {
+        for (T item : items) add(item);
+    }
+
+    @Override
     public void remove(T data) {
         bst.delete(data);
         size--;
+    }
+
+    @Override
+    public boolean set(T oldData, T newData) {
+        if (!bst.contains(oldData)) return false;
+        bst.delete(oldData);
+        bst.insert(newData);
+        return true;
     }
 
     @Override
@@ -58,6 +71,6 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new BSTSIterator();
     }
 }

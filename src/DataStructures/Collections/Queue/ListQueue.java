@@ -13,11 +13,11 @@ public class ListQueue<T> implements Queue<T>{
 
     private DoubleLinkedList<T> list;
 
-    class LinkedListQueueIterator implements Iterator<T> {
+    class LQIterator implements Iterator<T> {
 
         Iterator<T> listIter;
 
-        public LinkedListQueueIterator() { listIter = list.iterator(); }
+        public LQIterator() { listIter = list.iterator(); }
 
         @Override
         public boolean hasNext() { return listIter.hasNext(); }
@@ -59,7 +59,7 @@ public class ListQueue<T> implements Queue<T>{
 
     @Override
     public Iterator<T> iterator() {
-        return new LinkedListQueueIterator();
+        return new LQIterator();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
 
     }
 
-    private class MyIterator implements Iterator<Pair<I, V>> {
+    private class BTIterator implements Iterator<Pair<I, V>> {
 
         Queue<Node> parrents = new ListQueue<>();
         Queue<Node> children = new ListQueue<>();
@@ -68,7 +68,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
     }
 
     public Iterator<Pair<I, V>> iterator() {
-        return new MyIterator();
+        return new BTIterator();
     }
 
     /**

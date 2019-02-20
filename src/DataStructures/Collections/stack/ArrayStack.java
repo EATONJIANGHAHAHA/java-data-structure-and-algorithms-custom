@@ -8,11 +8,11 @@ public class ArrayStack<T> implements Stack<T> {
 
     Array<T> array = new Array<>();
 
-    class ArrayListStackIter implements Iterator<T> {
+    class ASIterator implements Iterator<T> {
 
         Iterator<T> it;
 
-        public ArrayListStackIter() {
+        public ASIterator() {
             it = array.iterator();
         }
 
@@ -53,12 +53,17 @@ public class ArrayStack<T> implements Stack<T> {
     }
 
     @Override
+    public void pushAll(Stack<? extends T> items) {
+        for (T item : items) push(item);
+    }
+
+    @Override
     public T pop() {
         return array.remove(array.size() - 1);
     }
 
     @Override
     public Iterator<T> iterator() {
-        return new ArrayListStackIter();
+        return new ASIterator();
     }
 }

@@ -14,5 +14,7 @@ public interface Stack<T> extends Collections<T> {
 
     void push(T data);
 
+    void pushAll(Stack<? extends T> items);
+
     T pop();
 }

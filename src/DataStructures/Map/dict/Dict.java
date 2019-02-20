@@ -1,10 +1,8 @@
 package DataStructures.Map.dict;
 
-import DataStructures.Collections.Collections;
-import DataStructures.Collections.Queue.Queue;
-import javafx.util.Pair;
+import DataStructures.Map.Map;
 
-public interface Dict<K, V> extends Collections<V> {
+public interface Dict<K, V> extends Map<K, V> {
 
     void add(K key, V value);
 
@@ -15,8 +13,6 @@ public interface Dict<K, V> extends Collections<V> {
     boolean contains(K key);
 
     V get(K key);
-
-    Queue<Pair<K, V>> getAll();
 
     void set(K key, V newValue);
 

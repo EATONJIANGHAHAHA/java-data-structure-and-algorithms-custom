@@ -1,7 +1,5 @@
 package DataStructures.Collections.list;
 
-import DataStructures.Collections.Queue.ListQueue;
-import DataStructures.Collections.Queue.Queue;
 import com.sun.istack.internal.Nullable;
 
 import java.util.Iterator;
@@ -35,12 +33,12 @@ public class LinkedList<T> implements List<T>{
     /**
      * 定制的迭代器， 客户端程序猿可以进行对封装过的泛型数据进行迭代访问。
      */
-    class LinkedListIterator implements Iterator<T> {
+    class LLIterator implements Iterator<T> {
 
         Node current;
         int index;
 
-        public LinkedListIterator() {
+        public LLIterator() {
             this.current = new Node(null, head, null);
             index = -1;
         }
@@ -85,14 +83,6 @@ public class LinkedList<T> implements List<T>{
             throw new IndexOutOfBoundsException(String.valueOf(index));
         Node current = node(index);
         return current.data;
-    }
-
-    @Override
-    public Queue<T> getAll() {
-        Queue<T> result = new ListQueue<>();
-        Iterator<T> it = iterator();
-        while (it.hasNext()) result.offer(it.next());
-        return result;
     }
 
     /**
@@ -289,7 +279,7 @@ public class LinkedList<T> implements List<T>{
 
     @Override
     public Iterator<T> iterator() {
-        return new LinkedListIterator();
+        return new LLIterator();
     }
 
 

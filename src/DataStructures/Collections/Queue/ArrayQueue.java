@@ -9,11 +9,11 @@ public class ArrayQueue<T> implements Queue<T> {
 
     Array<T> array;
 
-    class ArrayQueueIterator implements Iterator<T> {
+    class AQIterator implements Iterator<T> {
 
         Iterator<T> it;
 
-        public ArrayQueueIterator() {
+        public AQIterator() {
             it = array.iterator();
         }
 
@@ -74,6 +74,6 @@ public class ArrayQueue<T> implements Queue<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ArrayQueueIterator();
+        return new AQIterator();
     }
 }

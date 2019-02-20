@@ -1,12 +1,28 @@
 package DataStructures.Collections.Queue;
 
 import DataStructures.Map.tree.Heap;
+import DataStructures.Pair;
 
 import java.util.Iterator;
 
 public class HeapPriorityQueue<T extends Comparable<T>> implements Queue<T> {
 
     Heap<T, T> heap = new Heap<>();
+
+    private class HPQIterator implements Iterator<T> {
+
+        Iterator<Pair<T, T>> it = heap.iterator();
+
+        @Override
+        public boolean hasNext() {
+            return it.hasNext();
+        }
+
+        @Override
+        public T next() {
+            return it.next().getKey();
+        }
+    }
 
     @Override
     public boolean isEmpty() {
@@ -25,7 +41,7 @@ public class HeapPriorityQueue<T extends Comparable<T>> implements Queue<T> {
 
     @Override
     public void offer(T data) {
-        heap.insert(data, null);
+        heap.insert(data, data);
     }
 
     public void offerAll(Queue<? extends T> items) {
@@ -48,6 +64,6 @@ public class HeapPriorityQueue<T extends Comparable<T>> implements Queue<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new HPQIterator();
     }
 }

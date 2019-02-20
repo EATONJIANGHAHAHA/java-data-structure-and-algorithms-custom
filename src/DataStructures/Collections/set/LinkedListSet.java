@@ -9,7 +9,7 @@ public class LinkedListSet<T> implements Set<T> {
 
     DoubleLinkedList<T> list;
 
-    class LinkedListIterator implements Iterator<T> {
+    class LLSIterator implements Iterator<T> {
 
         Iterator<T> it = list.iterator();
 
@@ -32,8 +32,18 @@ public class LinkedListSet<T> implements Set<T> {
     }
 
     @Override
+    public void addAll(Set<? extends T> items) {
+        for (T item : items) add(item);
+    }
+
+    @Override
     public void remove(T data) {
         list.remove();
+    }
+
+    @Override
+    public boolean set(T oldData, T newData) {
+        return list.set(oldData, newData);
     }
 
     @Override
@@ -53,6 +63,6 @@ public class LinkedListSet<T> implements Set<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new LinkedListIterator();
+        return new LLSIterator();
     }
 }

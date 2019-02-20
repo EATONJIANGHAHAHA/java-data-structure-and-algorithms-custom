@@ -1,8 +1,5 @@
 package DataStructures.Collections.list;
 
-import DataStructures.Collections.Queue.ListQueue;
-import DataStructures.Collections.Queue.Queue;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -214,15 +211,6 @@ public class Array<T> implements List<T> {
     @Override
     public T get(int index) {
         return (T) objects[getInnerIndex(index)];
-    }
-
-    @Override
-    public Queue<T> getAll() {
-        Queue<T> result = new ListQueue<>();
-        Iterator<T> it = iterator();
-        while (it.hasNext())
-            result.offer(it.next());
-        return result;
     }
 
     @Override

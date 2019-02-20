@@ -4,7 +4,7 @@ import DataStructures.Collections.Queue.ArrayQueue;
 import DataStructures.Collections.Queue.ListQueue;
 import DataStructures.Collections.Queue.Queue;
 import DataStructures.Collections.list.Array;
-import javafx.util.Pair;
+import DataStructures.Pair;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Iterator;
@@ -18,7 +18,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
 
     Array<Pair<I, V>> array;
 
-    private class HeapIterator implements Iterator<V> {
+    private class HeapIterator implements Iterator<Pair<I, V>> {
 
         int index = 0;
 
@@ -28,8 +28,9 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
         }
 
         @Override
-        public V next() {
-            return array.get(index ++).getValue();
+        public Pair<I, V> next() {
+            return new Pair<>(array.get(index).getKey(),
+                    array.get(index ++).getValue());
         }
     }
 
@@ -102,7 +103,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
 
     @Override
     public void insertAll(Tree<? extends I, ? extends V> items) {
-        for (Pair pair : items.breadthFirst()) {
+        for (Pair<? extends I, ? extends V> pair : items.breadthFirst()) {
             insert((I) pair.getKey(), null);
         }
     }
@@ -185,7 +186,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
     }
 
     @Override
-    public Iterator<V> iterator() {
+    public Iterator<Pair<I, V>> iterator() {
         return new HeapIterator();
     }
 
