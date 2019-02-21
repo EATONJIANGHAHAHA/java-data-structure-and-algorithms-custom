@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  */
 public class Array<T> implements List<T> {
 
-    private Object[] objects = new Object[5];
+    private T[] objects = (T[]) new Object[5];
     private int tail, head, size;
     //tail: 下一个要插入的元素索引, head: 下一个要删除的元素索引, size: 结构大小
 
@@ -40,7 +40,7 @@ public class Array<T> implements List<T> {
     }
 
     public Array(int size) {
-        objects = new Object[size + 5];
+        objects = (T[]) new Object[size + 5];
         tail = 0;
         this.size = 0;
         head = 0;
@@ -73,7 +73,7 @@ public class Array<T> implements List<T> {
             newArray[i] = it.next();
         tail = size;
         head = 0;
-        objects = newArray;
+        objects = (T[]) newArray;
     }
 
     private boolean checkIndex(int index) {
