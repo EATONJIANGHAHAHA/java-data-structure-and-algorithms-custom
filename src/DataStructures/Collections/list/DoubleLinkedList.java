@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  */
 public class DoubleLinkedList<T> extends LinkedList<T> {
 
-    protected Node tail;
+    private Node tail;
 
     private boolean checkIndex(Integer index) {
         return index < size;

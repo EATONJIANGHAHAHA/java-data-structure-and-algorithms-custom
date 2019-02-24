@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
  */
 public class Array<T> implements List<T> {
 
+    @SuppressWarnings("unchecked")
     private T[] objects = (T[]) new Object[5];
     private int tail, head, size;
     //tail: 下一个要插入的元素索引, head: 下一个要删除的元素索引, size: 结构大小
@@ -17,7 +18,7 @@ public class Array<T> implements List<T> {
 
         int index;
 
-        public ArrayIterator() {
+        ArrayIterator() {
             index = head - 1;
         }
 
@@ -31,7 +32,7 @@ public class Array<T> implements List<T> {
         public T next() {
             if (!hasNext()) throw new NoSuchElementException();
             index = index == objects.length - 1 ? 0 : index + 1;
-            return (T) objects[index];
+            return objects[index];
         }
     }
 
@@ -39,6 +40,7 @@ public class Array<T> implements List<T> {
         new Array(10);
     }
 
+    @SuppressWarnings("unchecked")
     public Array(int size) {
         objects = (T[]) new Object[size + 5];
         tail = 0;
@@ -66,6 +68,7 @@ public class Array<T> implements List<T> {
         if (size < objects.length - 2) expendCapacity();
     }
 
+    @SuppressWarnings("unchecked")
     private void expendCapacity() {
         Object[] newArray = new Object[objects.length * 2];
         Iterator<T> it = new ArrayIterator();
@@ -77,14 +80,14 @@ public class Array<T> implements List<T> {
     }
 
     private boolean checkIndex(int index) {
-        return index < size;
+        return index < size && index >= 0;
     }
 
     /**
      * 获取内部数组可以使用的绝对下标.
      *
-     * @param index
-     * @return
+     * @param index 外部使用的相对下标
+     * @return 绝对下标
      */
     private int getInnerIndex(int index) {
         index += head;
@@ -93,21 +96,9 @@ public class Array<T> implements List<T> {
     }
 
     /**
-     * 获取待拷贝数组的长度.
-     *
-     * @param current 保证此参数是内部数组的绝对下标.
-     * @return
-     */
-    private int getCopyArrayLength(int current) {
-        if (tail < head && current > head)
-            return objects.length - Math.abs(tail - current);
-        else return tail - current;
-    }
-
-    /**
      * 向表尾添加元素
      *
-     * @param data
+     * @param data 待添加数据
      */
     @Override
     public void add(T data) {
@@ -120,7 +111,7 @@ public class Array<T> implements List<T> {
     /**
      * 向表头添加元素
      *
-     * @param data
+     * @param data 待添加数据
      */
     public void addFront(T data) {
         ensureCapacity();
@@ -132,8 +123,8 @@ public class Array<T> implements List<T> {
     /**
      * 向表中index元素后添加一个元素
      *
-     * @param data
-     * @param index
+     * @param data 待添加数据
+     * @param index 数据插入的位置
      */
     @Override
     public void add(int index, T data) {
@@ -162,31 +153,31 @@ public class Array<T> implements List<T> {
     /**
      * 移除最后一个元素
      *
-     * @return
+     * @return 被移除元素
      */
     @Override
     public T remove() {
         if (isEmpty()) throw new NoSuchElementException();
         size--;
-        return (T) objects[--tail];
+        return objects[--tail];
     }
 
     /**
      * 移除第一个元素
      *
-     * @return
+     * @return 被移除元素
      */
     public T removeFront() {
         if (isEmpty()) throw new NoSuchElementException();
         size--;
-        return (T) objects[head++];
+        return objects[head++];
     }
 
     @Override
     public T remove(int index) {
         if (!checkIndex(index)) throw new ArrayIndexOutOfBoundsException();
         int current = getInnerIndex(index);
-        T data = (T) objects[current];
+        T data = objects[current];
         pullPartsOnce(current);
         size--;
         return data;
@@ -210,7 +201,8 @@ public class Array<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        return (T) objects[getInnerIndex(index)];
+        if (!checkIndex(index)) return null;
+        return objects[getInnerIndex(index)];
     }
 
     @Override
@@ -234,7 +226,7 @@ public class Array<T> implements List<T> {
         int current = head;
         while (current != tail) {
             current = current == objects.length ? 0 : current;
-            stringBuilder.append(objects[current ++] + " ");
+            stringBuilder.append(objects[current ++]).append(" ");
         }
         return stringBuilder.toString();
     }

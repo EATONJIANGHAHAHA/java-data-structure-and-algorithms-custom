@@ -42,7 +42,13 @@ public class BinaryTree<I, V> implements Tree<I, V>{
 
         Queue<Node> parrents = new ListQueue<>();
         Queue<Node> children = new ListQueue<>();
-        Node current = root;
+        Node current;
+
+        public BTIterator() {
+            super();
+            current = root;
+            if (current != null) parrents.offer(current);
+        }
 
         @Override
         public boolean hasNext() {
@@ -52,13 +58,14 @@ public class BinaryTree<I, V> implements Tree<I, V>{
 
         @Override
         public Pair<I, V> next() {
+            if (current == null) throw new IllegalArgumentException();
             if (hasNext() && parrents.isEmpty()) {
                 parrents = children;
                 children = new ListQueue<>();
             }
             current = parrents.poll();
-            children.offer(current.left);
-            children.offer(current.right);
+            if (current.left != null) children.offer(current.left);
+            if (current.right != null) children.offer(current.right);
             return new Pair<>(current.index, current.value);
         }
     }
@@ -183,7 +190,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
 
     @Override
     public void insertAll(Tree<? extends I, ? extends V> items) {
-        for (Pair<? extends I, ? extends V> pair : items.breadthFirst()) {
+        for (Pair<? extends I, ? extends V> pair : items) {
             insert(pair.getKey(), pair.getValue());
         }
     }
