@@ -1,13 +1,14 @@
 package DataStructures.Collections.set;
 
 import DataStructures.Map.tree.BinarySearchTree;
+import DataStructures.Map.tree.Tree;
 import DataStructures.Pair;
 
 import java.util.Iterator;
 
 public class BSTSet<T extends Comparable<T>> implements Set<T> {
 
-    BinarySearchTree<T, Void> bst;
+    Tree<T, Void> bst;
     int size = 0;
 
     class BSTSIterator implements Iterator<T> {
@@ -31,7 +32,7 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
 
     @Override
     public void add(T data) {
-        bst.insert(data);
+        bst.insert(data, null);
         size++;
     }
 
@@ -50,7 +51,7 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
     public boolean set(T oldData, T newData) {
         if (!bst.contains(oldData)) return false;
         bst.delete(oldData);
-        bst.insert(newData);
+        bst.insert(newData, null);
         return true;
     }
 

@@ -8,6 +8,8 @@ public interface Tree<I, V> extends Map<I, V> {
 
     boolean isEmpty();
 
+    void insert(I index);
+
     void insert(I index, V value);
 
     void insertAll(Tree<? extends I, ? extends V> items);

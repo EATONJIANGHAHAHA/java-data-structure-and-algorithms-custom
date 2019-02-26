@@ -17,18 +17,19 @@ import java.util.Random;
  */
 public class BinaryTree<I, V> implements Tree<I, V>{
 
-    protected Node root;
+    Node root;
     protected int size;
 
-    public class Node {
+    protected class Node {
 
         protected I index;
         protected V value;
-        protected Node parrent;
-        protected Node left;
-        protected Node right;
+        Node parrent;
+        Node left;
+        Node right;
+        Integer height = 1;
 
-        protected Node(I index, V value, @Nullable Node parrent, @Nullable Node left, @Nullable Node right) {
+        Node(I index, V value, @Nullable Node parrent, @Nullable Node left, @Nullable Node right) {
             this.index = index;
             this.value = value;
             this.parrent = parrent;
@@ -44,7 +45,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         Queue<Node> children = new ListQueue<>();
         Node current;
 
-        public BTIterator() {
+        BTIterator() {
             super();
             current = root;
             if (current != null) parrents.offer(current);
@@ -70,7 +71,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         }
     }
 
-    public BinaryTree() {
+    BinaryTree() {
         this.size = 0;
     }
 
@@ -157,8 +158,9 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         return root == null;
     }
 
-    public void insert(I key) {
-        insert(key, null);
+    @Override
+    public void insert(I index) {
+        insert(index, null);
     }
 
     /**
@@ -310,7 +312,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
      * @param node
      * @return
      */
-    public Node getSuccesserNode(Node node) {
+    public Node getSuccessorNode(Node node) {
         if (node.right != null) return getLeftMost(node.right);
         Node current = node, parrent = node.parrent;
         while (parrent != null && !parrent.left.equals(current)) {
@@ -414,7 +416,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         return stringBuilder;
     }
 
-    public String getSpace(int num) {
+    private String getSpace(int num) {
         String space = " ";
         StringBuffer buf = new StringBuffer("");
         for (int i = 0; i < num; i++) {

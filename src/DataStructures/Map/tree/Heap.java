@@ -96,6 +96,11 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
     }
 
     @Override
+    public void insert(I index) {
+        insert(index, null);
+    }
+
+    @Override
     public void insert(I key, V value) {
         array.addFront(new Pair<>(key, value));
         heapify(0);

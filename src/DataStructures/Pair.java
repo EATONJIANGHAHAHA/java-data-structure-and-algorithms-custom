@@ -2,6 +2,14 @@ package DataStructures;
 
 public class Pair<K, V> {
 
+    public void setKey(K key) {
+        this.key = key;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
+    }
+
     K key;
     V value;
 
