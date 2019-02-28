@@ -27,7 +27,8 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         Node parrent;
         Node left;
         Node right;
-        Integer height = 1;
+        Integer height;
+        boolean color;
 
         Node(I index, V value, @Nullable Node parrent, @Nullable Node left, @Nullable Node right) {
             this.index = index;
@@ -35,10 +36,15 @@ public class BinaryTree<I, V> implements Tree<I, V>{
             this.parrent = parrent;
             this.left = left;
             this.right = right;
+            height = 1;
+            color = true; // represent red.
         }
 
     }
 
+    /**
+     * 迭代器默认使用宽度优先遍历
+     */
     private class BTIterator implements Iterator<Pair<I, V>> {
 
         Queue<Node> parrents = new ListQueue<>();
@@ -312,7 +318,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
      * @param node
      * @return
      */
-    public Node getSuccessorNode(Node node) {
+    protected Node getSuccessorNode(Node node) {
         if (node.right != null) return getLeftMost(node.right);
         Node current = node, parrent = node.parrent;
         while (parrent != null && !parrent.left.equals(current)) {
@@ -322,7 +328,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         return node;
     }
 
-    public Node getLeftMost(Node head) {
+    protected Node getLeftMost(Node head) {
         Node current = head;
         while (current.left != null)
             current = current.left;
@@ -395,9 +401,19 @@ public class BinaryTree<I, V> implements Tree<I, V>{
     /**
      * 打印一棵树, H表示头,^表示这个节点的头是在上一层的靠上位置, v表示这个节点的头是再上一层的考下位置.
      */
-
     private String printTree(Node head) {
-        return printInOrder(head, 0, "H", 17).toString();
+        return "--------------------------------------------------------------------------------------------------\n"
+                + printInOrder(head, 0, "H", 17).toString();
+    }
+
+    /**
+     * 复写本方法以实现打印每一个节点的特定内容
+     * @param head
+     * @param to
+     * @return
+     */
+    String printCurrentNode(Node head, String to) {
+        return to + head.index + "," + head.value + to;
     }
 
     private StringBuilder printInOrder(Node head, int height, String to, int len) {
@@ -406,7 +422,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
             return stringBuilder;
         }
         stringBuilder.append(printInOrder(head.right, height + 1, "V", len));
-        String val = to + head.index + "," + head.value + to;
+        String val = printCurrentNode(head, to);
         int lenM = val.length();
         int lenL = (len - lenM) / 2;
         int lenR = len - lenM - lenL;

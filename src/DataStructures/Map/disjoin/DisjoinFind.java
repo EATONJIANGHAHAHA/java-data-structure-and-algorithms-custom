@@ -3,7 +3,7 @@ package DataStructures.Map.disjoin;
 
 import DataStructures.Collections.list.Array;
 import DataStructures.Map.Map;
-import DataStructures.Map.tree.BinarySearchTree;
+import DataStructures.Map.tree.BSTree;
 import DataStructures.Map.tree.Tree;
 import DataStructures.Pair;
 import com.sun.istack.internal.Nullable;
@@ -158,9 +158,9 @@ public class DisjoinFind<S extends Integer, K, V> implements Disjoin<S, K, V> {
         disJoin.add(0, 33.0);
         disJoin.add(5, 2.34343);
         disJoin.unionElements(1, 0);
-        Tree<Integer, Double> tree = new BinarySearchTree<>();
+        Tree<Integer, Double> tree = new BSTree<>();
         tree.insert(3343, 1.2);
-        Tree<Integer, Double> tree2 = new BinarySearchTree<>();
+        Tree<Integer, Double> tree2 = new BSTree<>();
         tree2.insert(431000, 556.3);
         tree2.insert(49, 00.3);
         disJoin.addMaps(tree);

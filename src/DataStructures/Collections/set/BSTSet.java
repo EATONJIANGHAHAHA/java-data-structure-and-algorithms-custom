@@ -1,6 +1,6 @@
 package DataStructures.Collections.set;
 
-import DataStructures.Map.tree.BinarySearchTree;
+import DataStructures.Map.tree.BSTree;
 import DataStructures.Map.tree.Tree;
 import DataStructures.Pair;
 
@@ -27,7 +27,7 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
     }
 
     public BSTSet () {
-        bst = new BinarySearchTree<>();
+        bst = new BSTree<>();
     }
 
     @Override
