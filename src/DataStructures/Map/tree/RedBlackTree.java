@@ -3,7 +3,7 @@ package DataStructures.Map.tree;
 import DataStructures.Pair;
 import com.sun.istack.internal.Nullable;
 
-public class RBTree<I extends Comparable<I>, V> extends AVLTree<I, V> {
+public class RedBlackTree<I extends Comparable<I>, V> extends AVLTree<I, V> {
 
     private static final boolean RED = true;
     private static final boolean BLACK = false;
@@ -114,7 +114,7 @@ public class RBTree<I extends Comparable<I>, V> extends AVLTree<I, V> {
     }
 
     public static void main(String[] args) {
-        Tree<Integer, Integer> tree = new RBTree<>();
+        Tree<Integer, Integer> tree = new RedBlackTree<>();
         tree.insert(40);
         tree.insert(39);
         tree.insert(38);

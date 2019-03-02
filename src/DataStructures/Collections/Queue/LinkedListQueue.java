@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * 这是一个循环队列的链表实现
  * @param <T>
  */
-public class ListQueue<T> implements Queue<T>{
+public class LinkedListQueue<T> implements Queue<T>{
 
     private DoubleLinkedList<T> list;
 
@@ -26,7 +26,7 @@ public class ListQueue<T> implements Queue<T>{
         public T next() { return listIter.next(); }
     }
 
-    public ListQueue() { list = new DoubleLinkedList<>(); }
+    public LinkedListQueue() { list = new DoubleLinkedList<>(); }
 
     @Override
     public boolean isEmpty() { return list.isEmpty(); }
@@ -72,7 +72,7 @@ public class ListQueue<T> implements Queue<T>{
     }
 
     public static void main(String[] args) {
-        Queue<Integer> queue = new ListQueue<>();
+        Queue<Integer> queue = new LinkedListQueue<>();
         queue.offer(73);
         queue.offer(66);
         queue.offer(712);

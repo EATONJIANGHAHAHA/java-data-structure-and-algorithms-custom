@@ -7,7 +7,7 @@ import DataStructures.Pair;
  *
  * @param <I>
  */
-public class BSTree<I extends Comparable<I>, V> extends BinaryTree<I, V> {
+public class BinarySearchTree<I extends Comparable<I>, V> extends BinaryTree<I, V> {
 
     public void insert(I index) {
         insert(index, null);
@@ -143,7 +143,7 @@ public class BSTree<I extends Comparable<I>, V> extends BinaryTree<I, V> {
     }
 
     public static void main(String[] args) {
-        Tree<Integer, Integer> tree = new BSTree<>();
+        Tree<Integer, Integer> tree = new BinarySearchTree<>();
         tree.insert(28, 1);
 //        tree.insert(9, 2);
 //        tree.insert(73, 3);
@@ -161,7 +161,7 @@ public class BSTree<I extends Comparable<I>, V> extends BinaryTree<I, V> {
 //        System.out.println(queue);
 //
 //
-//        BSTree<Integer, Integer> tree2 = new BSTree<>();
+//        BinarySearchTree<Integer, Integer> tree2 = new BinarySearchTree<>();
 //        tree2.insert(11, 11);
 //        tree2.insert(22, 11);
 //        tree2.insert(33, 11);

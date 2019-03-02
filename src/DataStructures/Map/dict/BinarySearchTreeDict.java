@@ -1,13 +1,13 @@
 package DataStructures.Map.dict;
 
-import DataStructures.Map.tree.BSTree;
+import DataStructures.Map.tree.BinarySearchTree;
 import DataStructures.Pair;
 
 import java.util.Iterator;
 
-public class BSTDict<K extends Comparable<K>, V> implements Dict<K, V> {
+public class BinarySearchTreeDict<K extends Comparable<K>, V> implements Dict<K, V> {
 
-    BSTree<K, V> bst;
+    BinarySearchTree<K, V> bst;
 
     private class BSTDIterator implements Iterator<Pair<K, V>> {
 
@@ -24,8 +24,8 @@ public class BSTDict<K extends Comparable<K>, V> implements Dict<K, V> {
         }
     }
 
-    public BSTDict() {
-        bst = new BSTree<>();
+    public BinarySearchTreeDict() {
+        bst = new BinarySearchTree<>();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package DataStructures.Map.tree;
 
 import DataStructures.Collections.Queue.ArrayQueue;
-import DataStructures.Collections.Queue.ListQueue;
+import DataStructures.Collections.Queue.LinkedListQueue;
 import DataStructures.Collections.Queue.Queue;
 import DataStructures.Collections.list.Array;
 import DataStructures.Pair;
@@ -176,7 +176,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
 
     private Queue<Pair<I, V>> inorder(int head) {
         if (!checkIndex(head) || isEmpty()) return null;
-        Queue<Pair<I, V>> result = new ListQueue<>();
+        Queue<Pair<I, V>> result = new LinkedListQueue<>();
         Queue<Pair<I, V>> left = inorder(getLIndex(head));
         if (left != null) result.offerAll(left);
         result.offer(new Pair<>(array.get(head).getKey(), array.get(head).getValue()));

@@ -4,7 +4,7 @@ import DataStructures.Pair;
 import com.sun.istack.internal.Nullable;
 
 //todo: improve rotation.
-public class AVLTree<I extends Comparable<I>, V> extends BSTree<I, V> {
+public class AVLTree<I extends Comparable<I>, V> extends BinarySearchTree<I, V> {
 
     @Override
     public void insertAll(Tree<? extends I, ? extends V> items) {

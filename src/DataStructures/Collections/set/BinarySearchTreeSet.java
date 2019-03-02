@@ -1,12 +1,12 @@
 package DataStructures.Collections.set;
 
-import DataStructures.Map.tree.BSTree;
+import DataStructures.Map.tree.BinarySearchTree;
 import DataStructures.Map.tree.Tree;
 import DataStructures.Pair;
 
 import java.util.Iterator;
 
-public class BSTSet<T extends Comparable<T>> implements Set<T> {
+public class BinarySearchTreeSet<T extends Comparable<T>> implements Set<T> {
 
     Tree<T, Void> bst;
     int size = 0;
@@ -26,8 +26,8 @@ public class BSTSet<T extends Comparable<T>> implements Set<T> {
         }
     }
 
-    public BSTSet () {
-        bst = new BSTree<>();
+    public BinarySearchTreeSet() {
+        bst = new BinarySearchTree<>();
     }
 
     @Override

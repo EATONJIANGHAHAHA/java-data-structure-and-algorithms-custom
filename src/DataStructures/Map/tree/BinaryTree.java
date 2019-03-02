@@ -1,6 +1,6 @@
 package DataStructures.Map.tree;
 
-import DataStructures.Collections.Queue.ListQueue;
+import DataStructures.Collections.Queue.LinkedListQueue;
 import DataStructures.Collections.Queue.Queue;
 import DataStructures.Collections.stack.LinkedListStack;
 import DataStructures.Collections.stack.Stack;
@@ -47,8 +47,8 @@ public class BinaryTree<I, V> implements Tree<I, V>{
      */
     private class BTIterator implements Iterator<Pair<I, V>> {
 
-        Queue<Node> parrents = new ListQueue<>();
-        Queue<Node> children = new ListQueue<>();
+        Queue<Node> parrents = new LinkedListQueue<>();
+        Queue<Node> children = new LinkedListQueue<>();
         Node current;
 
         BTIterator() {
@@ -68,7 +68,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
             if (current == null) throw new IllegalArgumentException();
             if (hasNext() && parrents.isEmpty()) {
                 parrents = children;
-                children = new ListQueue<>();
+                children = new LinkedListQueue<>();
             }
             current = parrents.poll();
             if (current.left != null) children.offer(current.left);
@@ -98,9 +98,9 @@ public class BinaryTree<I, V> implements Tree<I, V>{
 
     @Override
     public Queue<Pair<I, V>> breadthFirst() { //todo:
-        Queue<Node> parrents = new ListQueue<>();
-        Queue<Node> children = new ListQueue<>();
-        Queue<Pair<I, V>> result = new ListQueue<>();
+        Queue<Node> parrents = new LinkedListQueue<>();
+        Queue<Node> children = new LinkedListQueue<>();
+        Queue<Pair<I, V>> result = new LinkedListQueue<>();
         parrents.offer(root);
         while (!parrents.isEmpty() || !children.isEmpty()) {
             while (!parrents.isEmpty()) {
@@ -110,7 +110,7 @@ public class BinaryTree<I, V> implements Tree<I, V>{
                 if (node.right != null) children.offer(node.right);
             }
             parrents = children;
-            children = new ListQueue<>();
+            children = new LinkedListQueue<>();
         }
         return result;
     }
@@ -259,8 +259,8 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         else return false;
     }
 
-    public ListQueue<Pair<I, V>> preOrder() {
-        ListQueue<Pair<I, V>> result = new ListQueue<>();
+    public LinkedListQueue<Pair<I, V>> preOrder() {
+        LinkedListQueue<Pair<I, V>> result = new LinkedListQueue<>();
         if (root == null) return result;
         Stack<Node> nodes = new LinkedListStack<>();
         Node current;
@@ -275,8 +275,8 @@ public class BinaryTree<I, V> implements Tree<I, V>{
     }
 
     @Override
-    public ListQueue<Pair<I, V>> inOrder() {
-        ListQueue<Pair<I, V>> result = new ListQueue<>();
+    public LinkedListQueue<Pair<I, V>> inOrder() {
+        LinkedListQueue<Pair<I, V>> result = new LinkedListQueue<>();
         if (root == null) return result;
         Stack<Node> nodes = new LinkedListStack<>();
         Node current = root;
@@ -294,8 +294,8 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         return result;
     }
 
-    public ListQueue<Pair<I, V>> postOrder() {
-        ListQueue<Pair<I, V>> result = new ListQueue<>();
+    public LinkedListQueue<Pair<I, V>> postOrder() {
+        LinkedListQueue<Pair<I, V>> result = new LinkedListQueue<>();
         if (root == null) return result;
         Stack<Node> nodes = new LinkedListStack<>();
         Stack<Node> help = new LinkedListStack<>();
