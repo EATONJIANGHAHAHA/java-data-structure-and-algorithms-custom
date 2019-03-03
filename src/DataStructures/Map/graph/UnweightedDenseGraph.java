@@ -262,7 +262,7 @@ public class UnweightedDenseGraph<V, E> implements Graph<V, E> {
         Integer current = node;
         while (!pass.isEmpty()) {
             while (visited[current] && it.hasNext()) current = it.next(); //迭代器需要修改
-            if (current != null) { //todo: 如果current不是最后一个
+            if (!visited[current]) { //todo: 检查
                 visited[pass.peek()] = true;
                 result.offer(pass.peek());
                 pass.push(current);
