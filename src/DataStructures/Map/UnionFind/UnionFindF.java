@@ -1,4 +1,4 @@
-package DataStructures.Map.disjoin;
+package DataStructures.Map.UnionFind;
 
 
 import DataStructures.Collections.list.Array;
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * @param <S>
  * @param <V>
  */
-public class DisjoinFind<S extends Integer, K, V> implements Disjoin<S, K, V> {
+public class UnionFindF<S extends Integer, K, V> implements UnionFind<S, K, V> {
 
     private Array<Entry> array = new Array<>(10);
     private Integer setIncremental = 0;
@@ -50,11 +50,11 @@ public class DisjoinFind<S extends Integer, K, V> implements Disjoin<S, K, V> {
         }
     }
 
-    public DisjoinFind() {
-        new DisjoinFind<>(10);
+    public UnionFindF() {
+        new UnionFindF<>(10);
     }
 
-    public DisjoinFind(int size) {
+    public UnionFindF(int size) {
         array = new Array<>(size);
     }
 
@@ -149,7 +149,7 @@ public class DisjoinFind<S extends Integer, K, V> implements Disjoin<S, K, V> {
     }
 
     public static void main(String[] args) {
-        Disjoin<Integer, Integer, Double> disJoin = new DisjoinFind<>();
+        UnionFind<Integer, Integer, Double> disJoin = new UnionFindF<>();
         disJoin.add(0, 1.1);
         disJoin.add(1, 2.2);
         disJoin.add(3, 123.0);

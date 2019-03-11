@@ -1,8 +1,8 @@
-package DataStructures.Map.disjoin;
+package DataStructures.Map.UnionFind;
 
 import DataStructures.Map.Map;
 
-public interface Disjoin<S extends Integer, K, V> extends Map<S, V> {
+public interface UnionFind<S extends Integer, K, V> extends Map<S, V> {
 
     boolean isConnected(int p, int q);
 

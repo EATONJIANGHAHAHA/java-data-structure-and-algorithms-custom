@@ -1,4 +1,4 @@
-package DataStructures.Map.disjoin;
+package DataStructures.Map.UnionFind;
 
 import DataStructures.Collections.list.Array;
 import DataStructures.Map.Map;
@@ -7,7 +7,7 @@ import com.sun.istack.internal.Nullable;
 
 import java.util.Iterator;
 
-public class DisjoinUnion<S extends Integer, K, V> implements Disjoin<S, K, V> {
+public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
 
     Array<Entry> parrents = new Array<>(10);
     Array<Integer> size = new Array<>(10);
@@ -165,7 +165,7 @@ public class DisjoinUnion<S extends Integer, K, V> implements Disjoin<S, K, V> {
     }
 
     public static void main(String[] args) {
-        Disjoin<Integer, Integer, Double> disJoin = new DisjoinUnion<>();
+        UnionFind<Integer, Integer, Double> disJoin = new UnionFindU<>();
         disJoin.add(0, 1.23);
         disJoin.add(2, 1.2);
         disJoin.add(3, 3.2);
