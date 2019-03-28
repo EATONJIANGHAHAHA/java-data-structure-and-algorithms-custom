@@ -3,11 +3,12 @@ package DataStructures.Collections.Queue;
 import DataStructures.Map.tree.Heap;
 import DataStructures.Pair;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class HeapPriorityQueue<T extends Comparable<T>> implements Queue<T> {
 
-    Heap<T, T> heap = new Heap<>();
+    Heap<T, T> heap = new Heap<>((o1, o2) -> o1.compareTo(o2));
 
     private class HPQIterator implements Iterator<T> {
 

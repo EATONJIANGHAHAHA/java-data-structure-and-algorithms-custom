@@ -6,7 +6,7 @@ public interface UnionFind<S extends Integer, K, V> extends Map<S, V> {
 
     boolean isConnected(int p, int q);
 
-    void unionElements(int p, int q);
+    void unionElements(int eOne, int eTwo);
 
     int size();
 
@@ -15,6 +15,8 @@ public interface UnionFind<S extends Integer, K, V> extends Map<S, V> {
     boolean contains(V value);
 
     void add(S set, V value);
+
+    void add(S set, K key, V value);
 
     void addAllElements(Map<S, V> items);
 

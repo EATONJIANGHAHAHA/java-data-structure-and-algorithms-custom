@@ -215,7 +215,8 @@ public class BinaryTree<I, V> implements Tree<I, V>{
     @Override
     public V delete(I index) {
         if (isEmpty()) throw new IllegalArgumentException("Tree is empty.");
-        return delete(root, index);
+        Node result = delete(root, index);
+        return result == null ? null : result.value;
     }
 
     @Override
@@ -223,15 +224,22 @@ public class BinaryTree<I, V> implements Tree<I, V>{
         return delete(root.index);
     }
 
-    private V delete(Node head, I index) {
+    @Override
+    public I deleteARI() {
+        if (isEmpty()) throw new IllegalArgumentException();
+        Node result = delete(root, root.index);
+        return result == null ? null : result.index;
+    }
+
+    private Node delete(Node head, I index) {
         size --;
         if (head == null) return null;
         if (head.index.equals(index)) {
             if (isLeft(head.parrent, head)) head.parrent.left = null;
             else head.parrent.right = null;
-            return head.value;
+            return head;
         }
-        V result = null;
+        Node result = null;
         result = delete(head.left, index);
         if (result != null) return result;
         return delete(head.right, index);

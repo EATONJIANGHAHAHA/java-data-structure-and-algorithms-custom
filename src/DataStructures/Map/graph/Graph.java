@@ -10,14 +10,11 @@ public interface Graph<V, E> extends Map<V, E> {
 
     boolean isDirected();
 
-    void addNode(V nodeValue);
-
     Integer indexOf(V nodeValue);
 
     V get(int node);
 
-    V removeNode(int node);
-
+    void addNode(V nodeValue);
     boolean addEdge(int node1, int node2, E edgeValue);
 
     E removeEdge(int node1, int node2);
@@ -40,9 +37,9 @@ public interface Graph<V, E> extends Map<V, E> {
 
     Queue<Integer> depthFirst(int node);
 
-    Queue<Integer> minSpanningTree(int node);
+    Queue<Integer> minSpanningTree();
 
-    Queue<Integer> shortedsPass(int node);
+    Queue<Integer> shortesdPath(int node);
 
     Iterator<Integer> neighbourIterator(int startNode);
 

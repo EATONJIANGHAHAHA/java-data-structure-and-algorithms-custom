@@ -2,59 +2,66 @@ package DataStructures.Map.tree;
 
 import DataStructures.Collections.Queue.Queue;
 import DataStructures.Pair;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.HashMap;
 import java.util.Iterator;
 
-public class Trie<I, V> implements Tree<I, V>{
+/**
+ * 字典树的定型实现，
+ */
+public class Trie<I extends String, V extends Integer> implements Tree<String, Integer> {
 
-    private Node root;
-    private int size;
+    private TrieNode root;
 
-    class Node {
-        int arrive, asEnding;
-        HashMap<I, Node> map;
+    @Override
+    public Iterator<Pair<String, Integer>> iterator() {
+        return null;
+    }
 
-        Node() {
-            new Node(0, 0);
+    public static class TrieNode {
+        public int path;
+        public int end;
+        public TrieNode[] nexts;
+
+        public TrieNode() {
+            path = 0;
+            end = 0;
+            nexts = new TrieNode[26];
         }
 
-        Node(I index) {
-            arrive = 0;
-            asEnding = 0;
-            map = new HashMap<>();
-            map.put(index, new Node());
-        }
-
-        Node(int arrive, int asEnding) {
-            this.arrive = arrive;
-            this.asEnding = asEnding;
-            this.map = new HashMap<>();
-        }
     }
 
     public Trie() {
-        root = new Node();
-        size = 0;
+        root = new TrieNode();
     }
 
     @Override
     public boolean isEmpty() {
-        return root.map.isEmpty();
+        return false;
+    }
+
+    public void insert(String word) {
+        if (word == null) return;
+        char[] chs = word.toCharArray();
+        TrieNode node = root;
+        int index;
+        for (int i = 0; i < chs.length; i++) {
+            index = chs[i] - 'a';
+            if (node.nexts[index] == null)
+                node.nexts[index] = new TrieNode();
+            node = node.nexts[index];
+            node.path++;
+        }
+        node.end++;
     }
 
     @Override
-    public void insert(I index) {
+    public void insert(String index, Integer value) {
 
     }
 
     @Override
-    public void insert(I index, V value) {
-
-    }
-
-    @Override
-    public void insertAll(Tree<? extends I, ? extends V> items) {
+    public void insertAll(Tree<? extends String, ? extends Integer> items) {
 
     }
 
@@ -63,43 +70,84 @@ public class Trie<I, V> implements Tree<I, V>{
         return 0;
     }
 
+    public Integer delete(String word) {
+        if (find(word) != 0) {
+            char[] chs = word.toCharArray();
+            TrieNode node = root;
+            int index;
+            for (int i = 0; i < chs.length; i++) {
+                index = chs[i] - 'a';
+                if (--node.nexts[index].path == 0) {
+                    node.nexts[index] = null;
+                    return i;
+                }
+                node = node.nexts[index];
+            }
+            node.end--;
+        }
+        return -1;
+    }
+
+    @Deprecated
     @Override
-    public V delete(I index) {
-        return null;
+    public Integer delete() {
+        throw new NotImplementedException();
+    }
+
+    @Deprecated
+    @Override
+    public String deleteARI() {
+        throw new NotImplementedException();
     }
 
     @Override
-    public V delete() {
-        return null;
-    }
-
-    @Override
-    public boolean set(I index, V value) {
+    public boolean set(String index, Integer value) {
         return false;
     }
 
     @Override
-    public V find(I index) {
+    public Integer find(String word) {
+        if (word == null) return 0;
+        char[] chs = word.toCharArray();
+        TrieNode node = root;
+        int index;
+        for (int i = 0; i < chs.length; i++) {
+            index = chs[i] - 'a';
+            if (node.nexts[index] == null) return 0;
+            node = node.nexts[index];
+        }
+        return node.end;
+    }
+
+    @Override
+    public Queue<Pair<String, Integer>> breadthFirst() {
         return null;
     }
 
     @Override
-    public Queue<Pair<I, V>> breadthFirst() {
+    public Queue<Pair<String, Integer>> inOrder() {
         return null;
     }
 
     @Override
-    public Queue<Pair<I, V>> inOrder() {
-        return null;
-    }
-
-    @Override
-    public boolean contains(I index) {
+    public boolean contains(String index) {
         return false;
     }
 
-    @Override
-    public Iterator<Pair<I, V>> iterator() {
-        return null;
+    public int prefixNumber(String pre) {
+        if (pre == null) {
+            return 0;
+        }
+        char[] chs = pre.toCharArray();
+        TrieNode node = root;
+        int index = 0;
+        for (int i = 0; i < chs.length; i++) {
+            index = chs[i] - 'a';
+            if (node.nexts[index] == null) {
+                return 0;
+            }
+            node = node.nexts[index];
+        }
+        return node.path;
     }
 }

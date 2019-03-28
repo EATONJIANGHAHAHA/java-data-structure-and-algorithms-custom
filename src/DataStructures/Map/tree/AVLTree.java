@@ -64,6 +64,13 @@ public class AVLTree<I extends Comparable<I>, V> extends BinarySearchTree<I, V> 
         return (result != null) ? result.getValue().value : null;
     }
 
+    @Override
+    public I deleteARI() {
+        Pair<Node, Node> result = delete(root, root.index);
+        root = (result != null) ? result.getKey() : root;
+        return result != null ? result.getValue().index : null;
+    }
+
     private Pair<Node, Node> delete(Node head, I index) {
         Pair<Node, Node> result;
         if (head == null) return null;

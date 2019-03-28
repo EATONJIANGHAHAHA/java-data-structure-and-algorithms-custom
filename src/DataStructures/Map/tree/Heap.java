@@ -7,6 +7,7 @@ import DataStructures.Collections.list.Array;
 import DataStructures.Pair;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -17,6 +18,7 @@ import java.util.Iterator;
 public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
 
     Array<Pair<I, V>> array;
+    Comparator<? super I> comparator;
 
     private class HeapIterator implements Iterator<Pair<I, V>> {
 
@@ -34,12 +36,14 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
         }
     }
 
-    public Heap(int size) {
-        array = new Array<>(size);
+    public Heap(Comparator<? super I> comparator) {
+        array = new Array<>();
+        this.comparator = comparator;
     }
 
-    public Heap() {
-        array = new Array<>();
+    public Heap(int size, Comparator<? super I> comparator) {
+        array = new Array<>(size);
+        this.comparator = comparator;
     }
 
     private boolean checkIndex(int index) {
@@ -64,7 +68,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
 
     private Integer indexOf(V value) {
         for (int i = 0; i < array.size(); i ++) {
-            if (array.get(i).getKey().equals(value))
+            if (array.get(i).getValue().equals(value))
                 return i;
         }
         return null;
@@ -80,9 +84,9 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
         int left = 1, size = array.size();
         while (left < array.size()) {
             int largest = left + 1 < size &&
-                    array.get(left).getKey().compareTo(array.get(left + 1).getKey()) < 0
-                    ? left + 1 : left;
-            if (array.get(index).getKey().compareTo(array.get(largest).getKey()) >= 0)
+                    comparator.compare(array.get(left).getKey(), array.get(left + 1).getKey()) < 0 ?
+                    left + 1 : left;
+            if (comparator.compare(array.get(index).getKey(), array.get(largest).getKey()) >= 0)
                 break;
             swap(index, largest);
             index = largest;
@@ -129,13 +133,22 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
         throw new NotImplementedException();
     }
 
-    @Override
-    public V delete() {
-        V result = array.get(0).getValue();
+    private Pair<I, V> delet() {
+        Pair<I, V> result = array.get(0);
         swap(0, array.size() - 1);
         array.remove(array.size() - 1);
         heapify(0);
         return result;
+    }
+
+    @Override
+    public V delete() {
+        return delet().getValue();
+    }
+
+    @Override
+    public I deleteARI() {
+        return delet().getKey();
     }
 
     /**
@@ -231,7 +244,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
     }
 
     public static void main(String[] args) {
-        Tree<Integer, Integer> heap = new Heap<>();
+        Tree<Integer, Integer> heap = new Heap<>((o1, o2) -> o2.compareTo(o1));
         heap.insert(12, 1);
         heap.insert(1, 1);
         heap.insert(33, 1);
@@ -239,9 +252,7 @@ public class Heap<I extends Comparable<I>, V> implements Tree<I, V>{
         heap.insert(900, 1);
         heap.insert(2, 1);
         heap.insert(70, 1);
-        heap.delete();
         System.out.println(heap);
-        System.out.println(heap.inOrder());
     }
 
 

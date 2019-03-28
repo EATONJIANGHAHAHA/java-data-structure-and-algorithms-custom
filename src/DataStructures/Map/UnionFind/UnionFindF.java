@@ -13,28 +13,28 @@ import java.util.Iterator;
 /**
  * 本并查集实现保证查找时间复杂度为常数级别.
  *
- * @param <S>
- * @param <V>
+ * @param <SET>
+ * @param <VALUE>
  */
-public class UnionFindF<S extends Integer, K, V> implements UnionFind<S, K, V> {
+public class UnionFindF<SET extends Integer, KEY, VALUE> implements UnionFind<SET, KEY, VALUE> {
 
     private Array<Entry> array = new Array<>(10);
     private Integer setIncremental = 0;
 
     private class Entry {
 
-        S set;
-        V value;
-        K key;
+        SET set;
+        VALUE value;
+        KEY key;
 
-        private Entry(S set, @Nullable K key, @Nullable V value) {
+        private Entry(SET set, @Nullable KEY key, @Nullable VALUE value) {
             this.set = set;
             this.value = value;
             this.key = key;
         }
     }
 
-    private class DJFIterator implements Iterator<Pair<S, V>> {
+    private class UFFIterator implements Iterator<Pair<SET, VALUE>> {
 
         Iterator<Entry> it = array.iterator();
 
@@ -44,7 +44,7 @@ public class UnionFindF<S extends Integer, K, V> implements UnionFind<S, K, V> {
         }
 
         @Override
-        public Pair<S, V> next() {
+        public Pair<SET, VALUE> next() {
             Entry result = it.next();
             return new Pair<>(result.set, result.value);
         }
@@ -62,7 +62,7 @@ public class UnionFindF<S extends Integer, K, V> implements UnionFind<S, K, V> {
         return key >= 0 && key < array.size();
     }
 
-    private S findSet(int index) {
+    private SET findSet(int index) {
         return array.get(index).set;
     }
 
@@ -72,9 +72,9 @@ public class UnionFindF<S extends Integer, K, V> implements UnionFind<S, K, V> {
     }
 
     @Override
-    public void unionElements(int p, int q) {
-        S pSet = findSet(p);
-        S qSet = findSet(q);
+    public void unionElements(int eOne, int eTwo) {
+        SET pSet = findSet(eOne);
+        SET qSet = findSet(eTwo);
         if (pSet == null || qSet == null) throw new IllegalArgumentException();
         if (pSet.equals(qSet)) return;
         for (Entry entry : array) if (entry.set.equals(qSet)) entry.set = pSet;
@@ -91,46 +91,52 @@ public class UnionFindF<S extends Integer, K, V> implements UnionFind<S, K, V> {
     }
 
     @Override
-    public boolean contains(V value) {
+    public boolean contains(VALUE value) {
         for (Entry entry : array) if (entry.value.equals(value)) return true;
         return false;
     }
 
     @Override
-    public void add(S set, V value) {
+    public void add(SET set, VALUE value) {
         array.add(new Entry(set, null, value));
         setIncremental = ((Integer) set > setIncremental) ? (Integer) set + 1 : setIncremental;
     }
 
     @Override
-    public void addAllElements(Map<S, V> items) {
-        for (Pair<S, V> pair : items) add(pair.getKey(), pair.getValue());
+    public void add(SET set, KEY key, VALUE value) {
+        array.add(new Entry(set, key, value));
+        setIncremental = ((Integer) set > setIncremental) ? (Integer) set + 1 : setIncremental;
+    }
+
+    @Override
+    public void addAllElements(Map<SET, VALUE> items) {
+        for (Pair<SET, VALUE> pair : items) add(pair.getKey(), pair.getValue());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addMaps(Map<K, V> items) {
-        for (Pair<K, V> pair : items)
-            array.add(new Entry((S) setIncremental, pair.getKey(), pair.getValue()));
+    public void addMaps(Map<KEY, VALUE> items) {
+        for (Pair<KEY, VALUE> pair : items)
+            array.add(new Entry((SET) setIncremental, pair.getKey(), pair.getValue()));
         setIncremental++;
     }
 
     @Override
-    public boolean set(int key, V newValue) {
+    public boolean set(int key, VALUE newValue) {
         if (!checkIndex(key)) return false;
         array.set(key, new Entry(array.get(key).set, null, newValue));
         return true;
     }
 
     @Override
-    public Integer find(V value) {
+    public Integer find(VALUE value) {
         for (int i = 0; i < array.size(); i++) if (array.get(i).value.equals(value)) return i;
         return null;
     }
 
     @Override
-    public Iterator<Pair<S, V>> iterator() {
-        return new DJFIterator();
+    public Iterator<Pair<SET, VALUE>> iterator() {
+        return new UFFIterator();
     }
 
     @Override

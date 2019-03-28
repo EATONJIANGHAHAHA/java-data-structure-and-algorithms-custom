@@ -20,6 +20,8 @@ public interface Tree<I, V> extends Map<I, V> {
 
     V delete();
 
+    I deleteARI();
+
     boolean set(I index, V value);
 
     V find(I index);

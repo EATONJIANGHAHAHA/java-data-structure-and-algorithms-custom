@@ -7,7 +7,7 @@ import com.sun.istack.internal.Nullable;
 
 import java.util.Iterator;
 
-public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
+public class UnionFindU<SET extends Integer, KEY, VALUE> implements UnionFind<SET, KEY, VALUE> {
 
     Array<Entry> parrents = new Array<>(10);
     Array<Integer> size = new Array<>(10);
@@ -15,18 +15,18 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
 
     private class Entry {
 
-        S parrent;
-        V value;
-        K key;
+        SET parrent;
+        VALUE value;
+        KEY key;
 
-        private Entry(S parrent, @Nullable K key, @Nullable V value) {
+        private Entry(SET parrent, @Nullable KEY key, @Nullable VALUE value) {
             this.parrent = parrent;
             this.value = value;
             this.key = key;
         }
     }
 
-    private class DJUIterator implements Iterator<Pair<S, V>> {
+    private class UFUIterator implements Iterator<Pair<SET, VALUE>> {
 
         Iterator<Entry> it = parrents.iterator();
 
@@ -36,7 +36,7 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
         }
 
         @Override
-        public Pair<S, V> next() {
+        public Pair<SET, VALUE> next() {
             Entry entry = it.next();
             return new Pair<>(entry.parrent, entry.value);
         }
@@ -47,10 +47,10 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
      * @param index
      * @return
      */
-    private S findSetRoot(Integer index) {
+    private SET findSetRoot(Integer index) {
         Entry current = parrents.get(index);
         if (current == null) return null;
-        if (current.parrent == null) return (S) index;
+        if (current.parrent == null) return (SET) index;
         while (!current.parrent.equals(parrents.indexOf(current))) {
             parrents.set(index, new Entry(parrents.get(current.parrent).parrent, current.key, current.value));
             current = parrents.get(current.parrent);
@@ -69,9 +69,9 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
     }
 
     @Override
-    public void unionElements(int p, int q) {
-        Integer pRoot = findSetRoot(p);
-        Integer qRoot = findSetRoot(q);
+    public void unionElements(int eOne, int eTwo) {
+        Integer pRoot = findSetRoot(eOne);
+        Integer qRoot = findSetRoot(eTwo);
         if (pRoot == null || qRoot == null) return;
         if (qRoot.equals(pRoot)) return;
         Entry pEntry = parrents.get(pRoot);
@@ -79,8 +79,8 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
         Integer pHeight = size.get(pRoot);
         Integer qHeight = size.get(qRoot);
         if (pHeight > qHeight)
-            parrents.set(qRoot, new Entry((S) pRoot, qEntry.key, qEntry.value));
-        else parrents.set(pRoot, new Entry((S) qRoot, pEntry.key, pEntry.value));
+            parrents.set(qRoot, new Entry((SET) pRoot, qEntry.key, qEntry.value));
+        else parrents.set(pRoot, new Entry((SET) qRoot, pEntry.key, pEntry.value));
         refreshHeight(qRoot);
     }
 
@@ -95,14 +95,21 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
     }
 
     @Override
-    public boolean contains(V value) {
+    public boolean contains(VALUE value) {
         for (Entry entry : parrents) if (entry.value.equals(value)) return true;
         return false;
     }
 
     @Override
-    public void add(S set, V value) {
+    public void add(SET set, VALUE value) {
         parrents.add(new Entry(set, null, value));
+        setIncremental = (Integer) set > setIncremental ? (Integer) set + 1 : setIncremental;
+        refreshHeight(set);
+    }
+
+    @Override
+    public void add(SET set, KEY key, VALUE value) {
+        parrents.add(new Entry(set, key, value));
         setIncremental = (Integer) set > setIncremental ? (Integer) set + 1 : setIncremental;
         refreshHeight(set);
     }
@@ -115,16 +122,16 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
     }
 
     @Override
-    public void addAllElements(Map<S, V> items) {
-        for (Pair<S, V> pair : items) add(pair.getKey(), pair.getValue());
+    public void addAllElements(Map<SET, VALUE> items) {
+        for (Pair<SET, VALUE> pair : items) add(pair.getKey(), pair.getValue());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addMaps(Map<K, V> items) {
+    public void addMaps(Map<KEY, VALUE> items) {
         Integer heightCount = 0;
-        for (Pair<K, V> pair : items) {
-            parrents.add(new Entry((S) setIncremental, pair.getKey(), pair.getValue()));
+        for (Pair<KEY, VALUE> pair : items) {
+            parrents.add(new Entry((SET) setIncremental, pair.getKey(), pair.getValue()));
             heightCount ++;
         }
         refreshHeight(heightCount);
@@ -132,21 +139,21 @@ public class UnionFindU<S extends Integer, K, V> implements UnionFind<S, K, V> {
     }
 
     @Override
-    public boolean set(int key, V newValue) {
+    public boolean set(int key, VALUE newValue) {
         if (!checkIndex(key)) return false;
         parrents.set(key, new Entry(parrents.get(key).parrent, null, newValue));
         return true;
     }
 
     @Override
-    public Integer find(V value) {
+    public Integer find(VALUE value) {
         for (int i = 0; i < parrents.size(); i ++) if (parrents.get(i).value.equals(value)) return i;
         return null;
     }
 
     @Override
-    public Iterator<Pair<S, V>> iterator() {
-        return new DJUIterator();
+    public Iterator<Pair<SET, VALUE>> iterator() {
+        return new UFUIterator();
     }
 
     @Override

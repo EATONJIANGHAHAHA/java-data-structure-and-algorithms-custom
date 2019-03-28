@@ -100,18 +100,6 @@ public class UnweightedDenseGraph<V, E> implements Graph<V, E> {
     }
 
     @Override
-    public V removeNode(int node) {
-        if (!containsNode(node)) return null;
-        for (int i = 0; i < graph.get(0).size(); i++) {
-            directedRemoveEdge(node, i);
-            directedRemoveEdge(i, node);
-        }
-        graph.remove(node);
-        for (List<Edge> list : graph) list.remove(node);
-        return nodes.remove(node);
-    }
-
-    @Override
     public boolean addEdge(int node1, int node2, E edgeValue) {
         if (!containsNode(node1) || !containsNode(node2)) return false;
         directedAddEdge(node1, node2, edgeValue);
@@ -276,13 +264,15 @@ public class UnweightedDenseGraph<V, E> implements Graph<V, E> {
         }
     }
 
+    @Deprecated
     @Override
-    public Queue<Integer> minSpanningTree(int node) {
+    public Queue<Integer> minSpanningTree() {
         return null;
     }
 
+    @Deprecated
     @Override
-    public Queue<Integer> shortedsPass(int node) {
+    public Queue<Integer> shortesdPath(int node) {
         return null;
     }
 
