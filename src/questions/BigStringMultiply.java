@@ -1,25 +1,32 @@
 package questions;
 
 import java.util.Scanner;
-import java.util.Stack;
 
 //todo
 public class BigStringMultiply {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String[] numbers = scanner.nextLine().split(" ");
-        char[] num1 = numbers[0].toCharArray(), num2 = numbers[1].toCharArray();
-        int num1I = num1.length - 1, num2I = num2.length - 1, num1c, num2c, temp = 0, mult;
-        Stack<Integer> stack = new Stack<>();
-        while (num1I >= 0 && num2I >= 0) {
-            num1c = Integer.parseInt(String.valueOf(num1[num1I--]));
-            num2c = Integer.parseInt(String.valueOf(num2[num2I--]));
-            mult = num1c * num2c + temp;
-            temp = mult / 10;
-            stack.push(mult % 10);
+        int num1 = scanner.nextInt(), num2 = scanner.nextInt(),
+                num1copy = num1, digitNum1, digitNum2,
+                carry = 0, result = 0, innerCount = 1, temp, innerResult = 0, outerCount = 1;
+        while(num2 != 0) {
+            digitNum2 = num2 % 10;
+            while (num1copy != 0) {
+                digitNum1 = num1copy % 10;
+                num1copy /= 10;
+                temp = digitNum2 * digitNum1 + carry;
+                carry = temp / 10;
+                innerResult += temp % 10 * innerCount;
+                innerCount *= 10;
+            }
+            innerResult += carry * innerCount;
+            result += innerResult * outerCount;
+            num1copy = num1;
+            innerCount = 1;
+            innerResult = 0;
+            outerCount *= 10;
+            num2 /= 10;
         }
-        while (!stack.isEmpty()) {
-            System.out.print(stack.pop());
-        }
+        System.out.println(result);
     }
 }
