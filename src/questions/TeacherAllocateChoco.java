@@ -21,8 +21,8 @@ import java.util.Scanner;
 public class TeacherAllocateChoco {
 
     public static void main(String[] args) {
-        Queue<Integer> h = new PriorityQueue<>(Comparator.naturalOrder());
-        Queue<Integer> w = new PriorityQueue<>(Comparator.naturalOrder());
+        Queue<Integer> h = new PriorityQueue<>(Integer::compareTo);
+        Queue<Integer> w = new PriorityQueue<>(Integer::compareTo);
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
         for (; n > 0; n --) {

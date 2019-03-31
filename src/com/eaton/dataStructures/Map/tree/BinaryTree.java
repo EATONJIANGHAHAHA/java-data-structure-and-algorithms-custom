@@ -10,6 +10,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * A binary search DataStructures.Dict.tree implementation.
@@ -455,15 +456,9 @@ public class BinaryTree<I, V> implements Tree<I, V>{
     }
 
     public static void main(String[] args) {
-        BinaryTree<Integer, Integer> tree = new BinaryTree<>();
-        tree.insert(28, 1);
-        tree.insert(9, 1);
-        tree.insert(73, 1);
-        tree.insert(8, 1);
-        tree.insert(12, 1);
-        tree.insert(7, 1);
-        tree.insert(54, 1);
-        tree.insert(98, 1);
-        System.out.println(tree);
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+
+        }
     }
 }
