@@ -1,5 +1,6 @@
 package com.eaton.dataStructures.Map.tree;
 
+import com.eaton.dataStructures.Collections.Queue.Queue;
 import com.eaton.dataStructures.Pair;
 
 /**
@@ -143,18 +144,19 @@ public class BinarySearchTree<I extends Comparable<I>, V> extends BinaryTree<I, 
     }
 
     public static void main(String[] args) {
-        Tree<Integer, Integer> tree = new BinarySearchTree<>();
+        BinaryTree<Integer, Integer> tree = new BinarySearchTree<>();
         tree.insert(28, 1);
-//        tree.insert(9, 2);
-//        tree.insert(73, 3);
-//        tree.insert(8, 4);
-//        tree.insert(12, 5);
-//        tree.insert(7, 6);
-//        tree.insert(98, 8);
-//        tree.insert(98, 7499);
-//        tree.insert(60, 111);
-        System.out.println(tree.delete(28));
-        System.out.println(tree);
+        tree.insert(9, 2);
+        tree.insert(73, 3);
+        tree.insert(8, 4);
+        tree.insert(12, 5);
+        tree.insert(7, 6);
+        tree.insert(98, 8);
+        tree.insert(98, 7499);
+        tree.insert(60, 111);
+        Queue queue = tree.postOrder();
+//        System.out.println(tree.delete(28));
+//        System.out.println(tree);
 //        Integer result = tree.find(5444);
 //        System.out.println(tree);
 //        Queue queue = tree.breadthFirst();

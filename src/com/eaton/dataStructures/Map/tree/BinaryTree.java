@@ -316,8 +316,10 @@ public class BinaryTree<I, V> implements Tree<I, V>{
             if (current.left != null) nodes.push(current.left);
             if (current.right != null) nodes.push(current.right);
         }
-        while (!help.isEmpty())
+        while (!help.isEmpty()) {
+            current = help.pop();
             result.offer(new Pair<>(current.index, current.value));
+        }
         return result;
     }
 
@@ -456,9 +458,6 @@ public class BinaryTree<I, V> implements Tree<I, V>{
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextInt()) {
 
-        }
     }
 }
